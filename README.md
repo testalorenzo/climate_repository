@@ -11,6 +11,6 @@ These are the variables, monthly measured, currently supported at both the [GADM
 - Temperature
 - Precipitation
 
-Notice that, for all variables, each observed value has been weighted by population density in 2010 in such administrative area. Data on population density has been retrieved from [NASA's SEDAC](https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-density-rev11). 
+Notice that, before linking grid data to administrative units, each grid observation has been weighted by population density in 2010 in the same grid. Data on population density have been retrieved from [NASA's SEDAC](https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-density-rev11). 
 
 Stay tuned for updates!
