@@ -5,4 +5,11 @@ The Climate Repository Project aims at combining climate data from different sou
 - Script access via our scripts (retrieval.py in script folder)
 - Direct access via GitHub (navigating through this repository)
 
+We let the user choose the preferred source of data. Currently, we offer data from [Climatic Research Unit (CRU TS)](https://www.uea.ac.uk/groups-and-centres/climatic-research-unit), [Delaware Climate Office]([https://www.google.com](https://climate.udel.edu/)) and [ECMWF's ERA5](https://www.ecmwf.int/). 
+
+These are the variables, monthly measured, currently supported:
+- Temperature
+- Precipitation
+
+
 Stay tuned for updates!
