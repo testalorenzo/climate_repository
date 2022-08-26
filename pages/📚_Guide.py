@@ -1,7 +1,7 @@
 import streamlit as st
 
 st.markdown("# Guide")
-st.sidebar.markdown("# Guide")
+
 """
 * *geo_resolution*: choose among administrative units GADM0 (countries) and GADM1 (bigger administrative units after countries);
 * *starting_year* and *ending_year*: window size. Notice that each source provides data for a peculiar time window;
@@ -13,3 +13,6 @@ st.sidebar.markdown("# Guide")
 * *threshold_kind*: choose among a percentile or an absolute threshold;
 * *threshold*: cutoff value.
 """
+
+st.sidebar.markdown('## Contact')
+st.sidebar.markdown('Feel free to send questions, bug reports, documentation issues, and other comments to Marco Gortan (m.gortan@studbocconi.it) and [Lorenzo Testa](https://testalorenzo.github.io) (l.testa@sssup.it)')
