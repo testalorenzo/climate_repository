@@ -1,7 +1,6 @@
 import streamlit as st
 
 st.markdown("# Welcome to the Climate Repository Project Dashboard")
-st.sidebar.markdown("# Home")
 
 """
 
@@ -24,5 +23,5 @@ Finally, we also allow the user to specify a percentile or an absolute threshold
 Stay tuned for updates!
 """
 
-st.markdown('## Contact')
-st.markdown('Feel free to send questions, bug reports, documentation issues, and other comments to Marco Gortan (m.gortan@studbocconi.it) and [Lorenzo Testa](https://testalorenzo.github.io) (l.testa@sssup.it)')
+st.sidebar.markdown('## Contact')
+st.sidebar.markdown('Feel free to send questions, bug reports, documentation issues, and other comments to Marco Gortan (m.gortan@studbocconi.it) and [Lorenzo Testa](https://testalorenzo.github.io) (l.testa@sssup.it)')
