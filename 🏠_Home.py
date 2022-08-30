@@ -20,6 +20,8 @@ Moreover, we also provide the possibility of weighting climate data by populatio
 
 Finally, we also allow the user to specify a percentile or an absolute threshold value of the historic distribution of a geographic unit, counting for each year the number of months that are over the given threshold.
 
+Users that want to run our pipelines on their own data can freely access our scripts on GitHub. 
+
 Stay tuned for updates!
 """
 
