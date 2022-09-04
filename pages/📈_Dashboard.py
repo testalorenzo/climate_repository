@@ -21,12 +21,13 @@ variable = st.sidebar.selectbox(
 # CSIC is the only that provides SPEI -- check consistency
 if (source == 'CSIC' and variable != 'spei'):
     st.warning('Warning: CSIC provides only variable SPEI', icon="⚠️")
+
 if (source != 'spei' and variable == 'CSIC'):
     st.warning('Warning: variable SPEI is only provided by CSIC', icon="⚠️")
 
 weight = st.sidebar.selectbox(
      'Weighting type',
-     ('population density 2015', 'unweighted'), index=0)
+     ('population density 2015', 'night lights 2015', 'unweighted'), index=0)
 
 # On the main page -- data set filters
 tab1, tab2 = st.tabs(["Time", "Threshold"])
@@ -103,6 +104,8 @@ else:
 # Introduce string for weights
 if weight == 'unweighted':
   weight = '_un'
+elif weight == 'night lights 2015':
+  weight = '_lights'
 else:
   weight = ''
 
