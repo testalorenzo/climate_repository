@@ -1,7 +1,7 @@
 # The Climate Repository Project
 
 The Climate Repository Project aims at combining climate data from different sources in a single, accessible and organized repository. We offer three ways for accessing data:
-- Dashboard access via [Web app](https://testalorenzo-climate-repository--home-x2mmry.streamlitapp.com/)
+- Dashboard access via [Web app](https://climaterepo.streamlitapp.com/)
 - Script access via our scripts (retrieval.py in script folder)
 - Direct access via GitHub (navigating through this repository)
 
