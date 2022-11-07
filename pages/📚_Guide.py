@@ -16,3 +16,4 @@ st.markdown("# Guide")
 
 st.sidebar.markdown('## Contact')
 st.sidebar.markdown('Feel free to send questions, bug reports, documentation issues, and other comments to Marco Gortan (m.gortan@studbocconi.it) and [Lorenzo Testa](https://testalorenzo.github.io) (l.testa@sssup.it)')
+st.sidebar.image("Embeds logo.png", use_column_width=True)
