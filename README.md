@@ -12,7 +12,7 @@ These are the variables, measured monthly and annually, currently supported at b
 - Precipitation
 - SPEI (Standardised Precipitation-Evapotranspiration Index)
 
-Moreover, we also provide the possibility of weighting climate data by population density or night lights usage in 2015 while linking grid data to administrative units. Data on population density have been retrieved from [NASA's SEDAC](https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-density-rev11); data on night lights usage have been retrieved from [Henderson et al. (2012)](https://www.aeaweb.org/articles?id=10.1257/aer.102.2.994).
+Moreover, we also provide the possibility of weighting climate data by population density in 2015 or night lights usage in 2008 while linking grid data to administrative units. Data on population density have been retrieved from [NASA's SEDAC](https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-density-rev11); data on night lights usage have been retrieved from [Henderson et al. (2012)](https://www.aeaweb.org/articles?id=10.1257/aer.102.2.994).
 
 Finally, we also allow the user to specify a percentile or an absolute threshold value of the historic distribution of a geographic unit, counting for each year the number of months that are over the given threshold.
 
