@@ -27,7 +27,7 @@ if (source != 'spei' and variable == 'CSIC'):
 
 weight = st.sidebar.selectbox(
      'Weighting type',
-     ('population density 2015', 'night lights 2015', 'unweighted'), index=0)
+     ('population density 2015', 'night lights 2008', 'unweighted'), index=0)
 
 # On the main page -- data set filters
 tab1, tab2 = st.tabs(["Time", "Threshold"])
@@ -104,7 +104,7 @@ else:
 # Introduce string for weights
 if weight == 'unweighted':
   weight = '_un'
-elif weight == 'night lights 2015':
+elif weight == 'night lights 2008':
   weight = '_lights'
 else:
   weight = ''
@@ -162,9 +162,24 @@ if stop == False:
   data2.index = data.iloc[:, 0:gap]
   st.line_chart(data2.T)
 
-  st.download_button(
-     label="Download data as .csv file",
-     data=data.to_csv().encode('utf-8'),
-     file_name= geo_resolution + '_' + source + '_' + variable + weight + '_data.csv',
-     mime='text/csv',
- )
+  col1, col2, col3 = st.columns(3)
+  with col1:    
+    download_format = st.selectbox('Download format', ("Wide", "Long"), index=0)
+    if download_format == 'Long':
+      if geo_resolution == 'gadm0':
+        data = pd.melt(data, id_vars='iso3', var_name='time', value_name=variable)
+      elif geo_resolution == 'gadm1':
+        data = pd.melt(data, id_vars=['ID_0', 'NAME_1'], var_name='time', value_name=variable)
+
+  with col2:
+    download_extension = st.selectbox('Download extension', ("csv", "json"), index=0)
+    if download_extension == 'csv':
+      data = data.to_csv().encode('utf-8')
+    elif download_extension == 'json':
+      data = data.to_json().encode('utf-8')
+
+  with col3:
+    st.download_button(
+     label="Download data",
+     data=data,
+     file_name= geo_resolution + '_' + source + '_' + variable + weight + '_data.' + download_extension)
