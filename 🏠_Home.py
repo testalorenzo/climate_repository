@@ -26,5 +26,5 @@ Stay tuned for updates!
 """
 
 st.sidebar.markdown('## Contacts')
-st.sidebar.markdown('Feel free to send questions, bug reports, documentation issues, and other comments to Marco Gortan (m.gortan@studbocconi.it) and [Lorenzo Testa](https://testalorenzo.github.io) (l.testa@sssup.it)')
+st.sidebar.markdown('Feel free to send questions, bug reports, documentation issues, and other comments to Marco Gortan (marco.gortan@studbocconi.it) and [Lorenzo Testa](https://testalorenzo.github.io) (l.testa@sssup.it)')
 st.sidebar.image("Embeds logo.png", use_column_width=True)
