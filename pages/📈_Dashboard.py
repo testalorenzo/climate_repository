@@ -3,8 +3,6 @@ import pandas as pd
 import numpy as np
 
 st.markdown("# Dashboard")
-st.sidebar.markdown("# Dashboard")
-
 
 # On the main page -- data set filters
 col1, col2, col3, col4, col5 = st.columns([1.2,1,1,1,1])
