@@ -1,6 +1,7 @@
 import streamlit as st
 
 st.markdown("# Guide")
+st.warning("Page under construction!", icon="⚠️")
 
 """
 * *geo_resolution*: choose among administrative units GADM0 (countries) and GADM1 (bigger administrative units after countries);
