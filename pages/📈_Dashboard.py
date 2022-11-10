@@ -194,3 +194,7 @@ if stop == False:
      label="Download data",
      data=data,
      file_name= geo_resolution + '_' + source + '_' + variable + weight + '_data.' + download_extension)
+    
+st.sidebar.markdown('## Contacts')
+st.sidebar.markdown('Feel free to send questions, bug reports, documentation issues, and other comments to Marco Gortan (marco.gortan@studbocconi.it) and [Lorenzo Testa](https://testalorenzo.github.io) (l.testa@sssup.it)')
+st.sidebar.image("Embeds logo.png", use_column_width=True)
