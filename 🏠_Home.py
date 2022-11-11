@@ -4,10 +4,19 @@ st.markdown("# Welcome to the Climate Repository Project Dashboard")
 
 """
 
-The Climate Repository Project aims at combining climate data from different sources in a single, accessible and organized repository. We offer three ways for accessing data:
-* Dashboard access via our web app
-* Script access via our scripts
-* Direct access via [GitHub](https://github.com/testalorenzo/climate_repository)
+The Climate Repository Project provides a user-friendly dashboard to download climate data:
+* From different sources in a single, accessible and organized repository
+*	Weighted by alternative measures of economic activity at different geographical resolutions
+
+The project is run within the [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [EMbeDS](https://www.santannapisa.it/en/department-excellence/embeds) at [Sant'Anna School of Advanced Studies](https://www.santannapisa.it/en) (Pisa, Italy) by [Giorgio Fagiolo](https://sites.google.com/view/giorgiofagiolo/home), Marco Gortan, [Francesco Lamperti](http://www.francescolamperti.eu/) and [Lorenzo Testa](https://testalorenzo.github.io/). 
+
+In the dashboard, the user can choose the preferred **source of climate data**, the **climate variable** of interest – at different geographical and time resolution – and a **weighting scheme**.
+
+## Data sources
+
+## Climate variables
+
+## Weighting scheme
 
 We let the user choose the preferred source of data. Currently, we offer data from [Climatic Research Unit (CRU TS)](https://www.uea.ac.uk/groups-and-centres/climatic-research-unit), [Delaware Climate Office](https://climate.udel.edu/), [ECMWF's ERA5](https://www.ecmwf.int/) and [CSIC](https://spei.csic.es/index.html). 
 
