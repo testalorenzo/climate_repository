@@ -5,7 +5,7 @@ import numpy as np
 st.markdown("# Dashboard")
 
 # On the main page -- data set filters
-col1, col2, col3, col4, col5 = st.columns([1.2,1,1,1,1])
+col1, col2, col3, col4, col5 = st.columns([1.3,1,1,1,1])
 
 with col1:    
   geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0, help='prova')
