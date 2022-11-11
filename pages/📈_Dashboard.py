@@ -8,22 +8,22 @@ st.markdown("# Dashboard")
 col1, col2, col3, col4, col5 = st.columns([1.3,1,1,1,1])
 
 with col1:    
-  geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0, help='prova')
+  geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0, help='Geographical units of observation')
 with col2:
-  variable = st.selectbox('Climate variable', ("temperature", "precipitation", "SPEI"), index=0)
+  variable = st.selectbox('Climate variable', ("temperature", "precipitation", "SPEI"), index=0, help='Measured climate variable of interest')
 if variable != "SPEI":
   with col3:
-    source = st.selectbox('Variable source', ("CRU TS", "ERA5", "UDelaware"), index=0)
+    source = st.selectbox('Variable source', ("CRU TS", "ERA5", "UDelaware"), index=0, help='Source of data for the selected climate variable')
 else:
   with col3:
     source = "CSIC"
     st.caption("Variable source")
     st.markdown(source)
 with col4:
-  weight = st.selectbox('Weighting type', ('population density', 'night lights', 'unweighted'), index=0)
+  weight = st.selectbox('Weighting type', ('population density', 'night lights', 'unweighted'), index=0, help='Weighting scheme specification')
 if weight!="unweighted":
   with col5:
-    weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0)
+    weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting scheme')
 
 
 # Time preferences
