@@ -8,7 +8,7 @@ st.markdown("# Dashboard")
 col1, col2, col3, col4, col5 = st.columns([1.2,1,1,1,1])
 
 with col1:    
-  geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0)
+  geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0, help='prova')
 with col2:
   variable = st.selectbox('Climate variable', ("temperature", "precipitation", "SPEI"), index=0)
 if variable != "SPEI":
