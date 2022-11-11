@@ -10,7 +10,7 @@ col1, col2, col3, col4, col5 = st.columns([1.2,1,1,1,1])
 with col1:    
   geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0)
 with col2:
-  variable = st.selectbox('Variable', ("temperature", "precipitation", "SPEI"), index=0)
+  variable = st.selectbox('Climate variable', ("temperature", "precipitation", "SPEI"), index=0)
 if variable != "SPEI":
   with col3:
     source = st.selectbox('Variable source', ("CRU TS", "ERA5", "UDelaware"), index=0)
