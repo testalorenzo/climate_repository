@@ -21,13 +21,14 @@ The dashboard allows the user to choose:
 
 ## Weighting scheme
 We provide the possibility of weighting climate data by measures of economic activity while linking grid data to administrative units. The dashboard allows the user to choose:
-*	*Weighting type*: there are currently three options: (i) no weights (i.e., download raw climate data); or weighting climate data by gridded (ii) population density from [NASA's SEDAC](https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-density-rev11); (iii) night lights usage (from [Li et al. 2020](https://www.nature.com/articles/s41597-020-0510-y))
+*	*Weighting type*: there are currently three options: (i) no weights (i.e., download raw climate data); or weighting climate data by gridded (ii) **population density** from [NASA's SEDAC](https://sedac.ciesin.columbia.edu/data/set/gpw-v4-population-density-rev11); (iii) **night lights usage** (from [Li et al. 2020](https://www.nature.com/articles/s41597-020-0510-y))
 *	*Weighting year*: depending on the weighting type, the user can choose the base year, i.e. the year of observation of the weighting variable
 
+We also allow the user to specify a percentile or an absolute threshold value of the historic distribution of a geographic unit, counting for each year the number of months that are over the given threshold.
 
-Finally, we also allow the user to specify a percentile or an absolute threshold value of the historic distribution of a geographic unit, counting for each year the number of months that are over the given threshold.
+Resulting data can be downloaded as either csv or json files. The user can also specify a data format, either **long** or **wide**.
 
-Users that want to run our pipelines on their own data are very welcome to reach us out! 
+Users that want to run our pipelines on their own data are very welcome to reach us out!
 
 Stay tuned for updates!
 """
