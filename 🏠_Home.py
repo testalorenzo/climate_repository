@@ -1,4 +1,5 @@
 import streamlit as st
+st.set_page_config(page_title="Climate Repository Project")
 
 st.markdown("# Welcome to the Climate Repository Project Dashboard")
 
