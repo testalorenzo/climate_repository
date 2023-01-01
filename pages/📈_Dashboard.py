@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import altair as alt
 
-alt.themes.enable("streamlit")
+#alt.themes.enable("streamlit")
 
 st.markdown("# Dashboard")
 
