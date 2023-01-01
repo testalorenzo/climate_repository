@@ -34,11 +34,20 @@ with tab2:
       col1, col2, col3 = st.columns(3)
       with col1:    
           threshold_dummy = st.selectbox('Threshold dummy', ("True", "False"), index=1)
-      if threshold_dummy == True:
-        with col2:
+      with col2:
+          if threshold_dummy == True:
             threshold_kind = st.selectbox('Threshold type', ("percentile", "absolute"), index=0)
-        with col3:
+          else:
+            threshold_kind = 'percentile'
+            st.caption('Threshold type')
+            st.markdown(threshold_kind)
+      with col3:
+          if threshold_dummy == True:
             threshold = st.number_input('Threshold', value = 90)
+          else:
+            threshold = 90
+            st.caption('Threshold')
+            st.markdown(threshold) 
     else:
       st.warning('Warning: ' + variable + ' data do not allow for threshold customization' , icon="⚠️")
 
