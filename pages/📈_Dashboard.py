@@ -178,7 +178,7 @@ if stop == False:
   data2.columns = label_vector
   # st.line_chart(data2.T)
   
-  st.altair_chart((data2.T).interactive(), use_container_width=True)
+  st.altair_chart(alt.Chart(data2.T).interactive(), use_container_width=True)
 
 
   col1, col2, col3 = st.columns(3)
