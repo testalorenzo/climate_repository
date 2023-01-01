@@ -173,7 +173,16 @@ if stop == False:
   else:
     label_vector = data2.columns
   data2.columns = label_vector
-  st.line_chart(data2.T)
+  # st.line_chart(data2.T)
+  
+  chart_data = pd.DataFrame(
+    np.random.randn(20, 3),
+    columns=['a', 'b', 'c'])
+
+  c = alt.Chart(chart_data).mark_circle().encode(
+      x='a', y='b', size='c', color='c', tooltip=['a', 'b', 'c'])
+
+  st.altair_chart(c, use_container_width=True)
 
   col1, col2, col3 = st.columns(3)
   with col1:    
