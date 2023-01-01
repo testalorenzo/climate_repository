@@ -40,14 +40,8 @@ with tab2:
         with col3:
             threshold = st.number_input('Threshold', value = 90)
       else:
-        with col2:
-            threshold_kind = 'percentile'
-            st.caption('Threshold type')
-            st.markdown(threshold_kind)
-        with col3:
-            threshold = 90
-            st.caption('Threshold')
-            st.markdown(threshold) 
+        threshold_kind = "percentile"
+        threshold = 90
     else:
       st.warning('Warning: ' + variable + ' data do not allow for threshold customization' , icon="⚠️")
 
