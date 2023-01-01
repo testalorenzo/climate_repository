@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import altair as alt
 
+alt.themes.enable("streamlit")
+
 st.markdown("# Dashboard")
 
 # On the main page -- data set filters
@@ -176,13 +178,8 @@ if stop == False:
   data2.columns = label_vector
   # st.line_chart(data2.T)
   
-  chart_data = pd.DataFrame(
-    np.random.randn(20, 3),
-    columns=['a', 'b', 'c'])
+  st.altair_chart((data2.T).interactive(), use_container_width=True)
 
-  c = alt.Chart(chart_data).mark_circle().encode(x='a', y='b', size='c', color='c', tooltip=['a', 'b', 'c'])
-
-  st.altair_chart(c, use_container_width=True)
 
   col1, col2, col3 = st.columns(3)
   with col1:    
