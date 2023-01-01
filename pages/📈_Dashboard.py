@@ -35,7 +35,7 @@ with tab2:
       with col1:    
           threshold_dummy = st.selectbox('Threshold dummy', ("True", "False"), index=1)
       with col2:
-          threshold_kind = st.selectbox('Threshold kind', ("percentile", "absolute"), index=0)
+          threshold_kind = st.selectbox('Threshold type', ("percentile", "absolute"), index=0)
       with col3:
           threshold = st.number_input('Threshold', value = 90)
     else:
