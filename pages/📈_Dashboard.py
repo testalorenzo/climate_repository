@@ -181,13 +181,13 @@ if stop == False:
   data2 = pd.concat([data2, data.iloc[:, 0:gap]], axis = 1)
   data2 = data2.melt(data.iloc[:, 0:gap].columns, var_name='when', value_name='what')
   
-  nearest = alt.selection(type='single', nearest=True, on='mouseover', fields=['when'], empty='none')
+  #nearest = alt.selection(type='single', nearest=True, on='mouseover', fields=['when'], empty='none')
   line = alt.Chart(data2).mark_line(interpolate='basis').encode(
     x='when:Q',
     y='what:Q',
     color='gadm0:N')
-  c = alt.layer(line, nearest)
-  st.altair_chart(c, use_container_width=True)
+  #c = alt.layer(line, nearest)
+  st.altair_chart(line, use_container_width=True)
   st.dataframe(data=data2)
 
 
