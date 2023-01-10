@@ -184,8 +184,10 @@ if stop == False:
   line = alt.Chart(data2).mark_line(interpolate='basis').encode(
     x='x:Q',
     y='y:Q',
-    color='category:N'
-)
+    color='category:N')
+
+  # Put the five layers into a chart and bind the data
+  alt.layer(line).properties(width=600, height=300)
 
 
   col1, col2, col3 = st.columns(3)
