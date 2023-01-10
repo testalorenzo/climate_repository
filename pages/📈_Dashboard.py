@@ -178,7 +178,7 @@ if stop == False:
     label_vector = data2.columns
   data2.columns = label_vector
   # st.line_chart(data2.T)
-  data2 = data2.melt(data2.columns[0:gap], var_name='when', value_name='what')
+  data2 = data2.reset_index().melt(data2.reset_index().columns[0:gap], var_name='when', value_name='what')
   # st.altair_chart(alt.Chart(data2.T).interactive(), use_container_width=True)
   
   line = alt.Chart(data2).mark_line(interpolate='basis').encode(
