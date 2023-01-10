@@ -178,7 +178,7 @@ if stop == False:
     label_vector = data2.columns
   data2.columns = label_vector
   # st.line_chart(data2.T)
-  data2 = pd.concat(data2, data.iloc[:, 0:gap], axis = 1)
+  data2 = pd.concat([data2, data.iloc[:, 0:gap]], axis = 1)
   data2 = data2.melt(data.iloc[:, 0:gap].columns, var_name='when', value_name='what')
   # st.altair_chart(alt.Chart(data2.T).interactive(), use_container_width=True)
   
