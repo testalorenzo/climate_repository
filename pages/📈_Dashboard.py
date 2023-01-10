@@ -156,7 +156,6 @@ if stop == False:
       days_by_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 31, 31]
       #data = data.groupby(np.arange(data.shape[1])//12, axis=1).mean()
       data = data.groupby(np.arange(data.shape[1])//12, axis=1).apply(np.average)
-      data = 
     data.columns = list(range(starting_year, ending_year + 1))
     data = pd.concat([observations, data], axis=1)
 
