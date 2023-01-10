@@ -182,10 +182,16 @@ if stop == False:
   data2 = data2.melt(data.iloc[:, 0:gap].columns, var_name='when', value_name='what')
   
   #nearest = alt.selection(type='single', nearest=True, on='mouseover', fields=['when'], empty='none')
-  line = alt.Chart(data2).mark_line(interpolate='basis').encode(
-    x='when:Q',
-    y='what:Q',
-    color='iso3:N')
+  if geo_resolution == 'gadm1':
+    line = alt.Chart(data2).mark_line(interpolate='basis').encode(
+      x='when:Q',
+      y='what:Q',
+      color='NAME_1:N')
+  else:
+    line = alt.Chart(data2).mark_line(interpolate='basis').encode(
+      x='when:Q',
+      y='what:Q',
+      color='iso3:N')
   #c = alt.layer(line, nearest)
   st.altair_chart(line, use_container_width=True)
   st.dataframe(data=data2)
