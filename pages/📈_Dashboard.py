@@ -181,13 +181,14 @@ if stop == False:
   data2 = pd.concat([data2, data.iloc[:, 0:gap]], axis = 1)
   data2 = data2.melt(data.iloc[:, 0:gap].columns, var_name='when', value_name='what')
   
-  c = alt.Chart(data2).mark_line(interpolate='basis').encode(
+  nearest = alt.selection(type='single', nearest=True, on='mouseover', fields=['when'], empty='none')
+  line = alt.Chart(data2).mark_line(interpolate='basis').encode(
     x='x:Q',
     y='y:Q',
     color='category:N')
 
   # Put the five layers into a chart and bind the data
-  #c = alt.layer(line)
+  c = alt.layer(line, nearest)
   
   st.altair_chart(c, use_container_width=True)
   st.dataframe(data=data2)
