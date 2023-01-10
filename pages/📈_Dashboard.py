@@ -183,13 +183,10 @@ if stop == False:
   
   nearest = alt.selection(type='single', nearest=True, on='mouseover', fields=['when'], empty='none')
   line = alt.Chart(data2).mark_line(interpolate='basis').encode(
-    x='x:Q',
-    y='y:Q',
-    color='category:N')
-
-  # Put the five layers into a chart and bind the data
+    x='when:Q',
+    y='what:Q',
+    color='gadm0:N')
   c = alt.layer(line, nearest)
-  
   st.altair_chart(c, use_container_width=True)
   st.dataframe(data=data2)
 
