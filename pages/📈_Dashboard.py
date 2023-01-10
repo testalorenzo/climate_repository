@@ -153,9 +153,8 @@ if stop == False:
       data = data.groupby(np.arange(data.shape[1])//12, axis=1).sum()
     elif variable == 'tmp':
       data = data.iloc[:, gap:]
-      days_by_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 31, 31]
-      #data = data.groupby(np.arange(data.shape[1])//12, axis=1).mean()
-      data = data.groupby(np.arange(data.shape[1])//12, axis=1).apply(lambda x: np.average(x, axis=1))
+      # days_by_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 31, 31]
+      data = data.groupby(np.arange(data.shape[1])//12, axis=1).mean()
     data.columns = list(range(starting_year, ending_year + 1))
     data = pd.concat([observations, data], axis=1)
 
