@@ -188,6 +188,8 @@ if stop == False:
 
   # Put the five layers into a chart and bind the data
   alt.layer(line).properties(width=600, height=300)
+  
+  st.dataframe(data=data2)
 
 
   col1, col2, col3 = st.columns(3)
