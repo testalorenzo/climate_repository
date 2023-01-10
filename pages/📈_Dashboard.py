@@ -185,7 +185,7 @@ if stop == False:
   line = alt.Chart(data2).mark_line(interpolate='basis').encode(
     x='when:Q',
     y='what:Q',
-    color='gadm0:N')
+    color='iso3:N')
   #c = alt.layer(line, nearest)
   st.altair_chart(line, use_container_width=True)
   st.dataframe(data=data2)
