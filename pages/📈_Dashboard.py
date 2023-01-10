@@ -188,8 +188,9 @@ if stop == False:
     color='category:N')
 
   # Put the five layers into a chart and bind the data
-  alt.layer(line).properties(width=600, height=300)
+  c = alt.layer(line)
   
+  st.altair_chart(c, use_container_width=True)
   st.dataframe(data=data2)
 
 
