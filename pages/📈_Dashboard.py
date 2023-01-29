@@ -10,7 +10,7 @@ st.markdown("# Dashboard")
 # On the main page -- data set filters
 col1, col2, col3, col4, col5 = st.columns([1.3,1,1,1,1])
 
-with col1:    
+with col1:
   geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0, help='Geographical units of observation')
 with col2:
   variable = st.selectbox('Climate variable', ("temperature", "precipitation", "SPEI"), index=0, help='Measured climate variable of interest')
@@ -174,28 +174,12 @@ if stop == False:
   data2.index = data.iloc[:, 0:gap]
   if time_frequency == 'monthly':
     label_vector = [str(x) + "_" + str(y) for x in range(starting_year, ending_year + 1) for y in range(1,13)]
+    label_vector = pd.to_datetime(label_vector, format="%Y_%m")
   else:
     label_vector = data2.columns
+    label_vector = pd.to_datetime(label_vector, format="%Y")
   data2.columns = label_vector
   st.line_chart(data2.T)
-  #data2 = pd.concat([data2, data.iloc[:, 0:gap]], axis = 1)
-  #data2 = data2.melt(data.iloc[:, 0:gap].columns, var_name='when', value_name='what')
-  
-  #nearest = alt.selection(type='single', nearest=True, on='mouseover', fields=['when'], empty='none')
-  #if geo_resolution == 'gadm1':
-  #  line = alt.Chart(data2).mark_line(interpolate='basis').encode(
-  #    x='when:Q',
-  #    y='what:Q',
-  #    color='NAME_1:N')
-  #else:
-  #  line = alt.Chart(data2).mark_line(interpolate='basis').encode(
-  #    x='when:Q',
-  #    y='what:Q',
-  #    color='iso3:N')
-  #c = alt.layer(line, nearest)
-  #st.altair_chart(line, use_container_width=True)
-  #st.dataframe(data=data2)
-
 
   col1, col2, col3 = st.columns(3)
   with col1:    
