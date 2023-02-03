@@ -241,7 +241,7 @@ if stop is False:
     with plot2:
         
         # 6.2 Plot map
-
+        st.markdown("ciao")
 
 # Side bar images
 st.sidebar.image("Embeds logo.png", use_column_width=True)
