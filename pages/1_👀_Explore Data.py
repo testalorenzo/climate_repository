@@ -8,6 +8,7 @@ import numpy as np
 import altair as alt
 import vega_datasets
 import geopandas as gpd
+import matplotlib.pyplot as plt
 
 @st.cache
 def load_data(geo_resolution, variable, source, weight, weight_year):
