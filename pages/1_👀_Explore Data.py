@@ -245,9 +245,8 @@ if stop is False:
         # 6.2 Plot map
        
         world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-        data3 = pd.merge(data, world, left_on='iso3', right_on='iso_a3')
         fig, ax = plt.subplots(1, 1)
-        data3.plot(column='pop_est', ax=ax, legend=True, legend_kwds={'label': str(variable) + " by Country in " + str(snapshot), 'orientation': "horizontal"})
+        world.plot(column='pop_est', ax=ax, legend=True, legend_kwds={'label': str(variable) + " by Country in " + str(snapshot), 'orientation': "horizontal"})
         st.pyplot(fig=fig)
 
 
