@@ -246,7 +246,8 @@ if stop is False:
        
         world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
         # data3 = pd.merge(data, world, left_on='iso3', right_on='iso_a3')
-        fig = world.plot()
+        fig, ax = plt.subplots(1, 1)
+        world.plot(column='pop_est', ax=ax, legend=True)
         st.pyplot(fig=fig)
 
 
