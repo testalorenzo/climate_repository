@@ -103,15 +103,7 @@ with plot1:
         # Ending year
         with col2:
             ending_year = st.slider('Ending year', starting_year, 2021, 2017)
-
-
-with plot2:
-
-    # 3. Select snapshot
-    st.markdown("Snapshot")
-    snapshot = st.slider('Snapshot year', 1900, 2021, 1971)
    
-
 
 
 # 4. Consistency routine
@@ -169,7 +161,15 @@ elif weight == 'night lights':
 else:
     weight = ''
 
+    
+# Map snapshot
+with plot2:
 
+    # 3. Select snapshot
+    st.markdown("Snapshot")
+    snapshot = st.slider('Snapshot year', min_year, max_year, 1971)
+
+    
 # 5. Access data
 
 # Extract data if consistency checks were passed
