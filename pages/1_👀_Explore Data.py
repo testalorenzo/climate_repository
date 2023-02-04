@@ -245,14 +245,7 @@ if stop is False:
        
         world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
         data3 = pd.merge(data, world, left_on='iso3', right_on='iso_a3')
-        st.dataframe(data3)
-        alt_plot = alt.Chart(data3).mark_geoshape().encode(
-            color='rate:Q'
-        )
-
-        # Plot settings
-        alt.themes.enable("streamlit")
-        st.altair_chart(alt_plot, use_container_width=True)    
+        st.dataframe(data3) 
 
 
 # Side bar images
