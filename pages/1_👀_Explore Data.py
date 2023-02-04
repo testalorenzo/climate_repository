@@ -244,8 +244,8 @@ if stop is False:
         # 6.2 Plot map
        
         world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-        data3 = pd.merge(data, world, left_on='iso3', right_on='iso_a3')
-        st.dataframe(data3) 
+        # data3 = pd.merge(data, world, left_on='iso3', right_on='iso_a3')
+        st.dataframe(world) 
 
 
 # Side bar images
