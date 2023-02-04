@@ -99,7 +99,7 @@ with plot1:
         col1, col2 = st.columns(2)
         # Starting year
         with col1:    
-            starting_year = st.slider('Starting year', 1900, 2021, 1971)
+            starting_year = st.slider('Starting year', 1900, 2021, 1998)
         # Ending year
         with col2:
             ending_year = st.slider('Ending year', starting_year, 2021, 2017)
