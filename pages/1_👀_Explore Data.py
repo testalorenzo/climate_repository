@@ -6,7 +6,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
-# import vega_datasets
+import vega_datasets
+import geopandas as gpd
 
 @st.cache
 def load_data(geo_resolution, variable, source, weight, weight_year):
@@ -241,7 +242,23 @@ if stop is False:
     with plot2:
         
         # 6.2 Plot map
-        st.markdown("ciao")
+       
+        counties = alt.topo_feature(vega_datasets.data.us_10m.url, 'counties')
+        source = vega_datasets.data.unemployment.url
+
+        alt_plot = alt.Chart(counties).mark_geoshape().encode(
+            color='rate:Q'
+        ).transform_lookup(
+            lookup='id',
+            from_=alt.LookupData(source, 'id', ['rate'])
+        ).project(
+            type='albersUsa'
+        )
+
+        # Plot settings
+        alt.themes.enable("streamlit")
+        st.altair_chart(alt_plot, use_container_width=True)    
+
 
 # Side bar images
 st.sidebar.image("Embeds logo.png", use_column_width=True)
