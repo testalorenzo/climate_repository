@@ -243,16 +243,11 @@ if stop is False:
         
         # 6.2 Plot map
        
-        counties = alt.topo_feature(vega_datasets.data.us_10m.url, 'counties')
-        source = vega_datasets.data.unemployment.url
+        world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+        data3 = pd.merge(data, world, left_on='iso3', right_on='iso_a3')
 
-        alt_plot = alt.Chart(counties).mark_geoshape().encode(
+        alt_plot = alt.Chart(data3).mark_geoshape().encode(
             color='rate:Q'
-        ).transform_lookup(
-            lookup='id',
-            from_=alt.LookupData(source, 'id', ['rate'])
-        ).project(
-            type='albersUsa'
         )
 
         # Plot settings
