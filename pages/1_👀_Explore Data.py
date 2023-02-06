@@ -338,7 +338,7 @@ with plot2:
     snapshot_data = world.merge(snapshot_data, on='iso_a3')
     #snapshot_data = pd.merge(snapshot_data, world, left_on='iso3', right_on='iso_a3')
     #st.dataframe(data=snapshot_data)
-    snapshot_data.plot(column='pop_est', ax=ax, legend=True, legend_kwds={'label': str(variable2) + " by Country in " + str(snapshot), 'orientation': "horizontal"})
+    snapshot_data.plot(column='to_plot', ax=ax, legend=True, legend_kwds={'label': str(variable2) + " by Country in " + str(snapshot), 'orientation': "horizontal"})
     st.pyplot(fig=fig)
 
 
