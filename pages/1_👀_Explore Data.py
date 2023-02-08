@@ -54,7 +54,8 @@ with plot1:
     if weight!="unweighted":
         with col5:
             weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting scheme', key = 'weight_year_ts')
-
+    else:
+        weight_year = 2000
     # Threshold settings
     if variable != 'SPEI':
         col1, col2, col3 = st.columns(3)
@@ -231,7 +232,8 @@ with plot2:
     if weight2 != "unweighted":
         with col5:
             weight_year2 = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting scheme')
-
+    else:
+        weight2 = 2000
     # Threshold settings
     col1, col2, col3 = st.columns(3)
     # Activate threshold customization
