@@ -43,7 +43,7 @@ if weight!="unweighted":
     with col5:
         weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting scheme')
 else:
-    weight_year = 2000
+    weight_year = "NA"
 
 # 2. Select the time period, the threshold and observations.
 
@@ -230,7 +230,7 @@ with col2:
 with col3:
     st.download_button(label = "Download data", data = data, file_name = geo_resolution + '_' + source + '_' + variable + weight + '_data.' + download_extension)
 with col3:
-    meta_text = 'Metadata\n' + 'Geographic resolution: ' + geo_resolution + '\nVariable source: ' + source + '\nVariable: ' + variable + '\nWeight' +  weight + '\nWeighting reference year'+ weight_year + '\n\nRemember to cite our work!\nhttps://climaterepo.streamlit.app/'
+    meta_text = 'Metadata\n' + 'Geographic resolution: ' + geo_resolution + '\nVariable source: ' + source + '\nVariable: ' + variable + '\nWeight' + weight + '\nWeighting reference year'+ str(weight_year) + '\n\nRemember to cite our work!\nhttps://climaterepo.streamlit.app/'
     st.download_button(label="Download metadata", data = meta_text, file_name= 'metadata.txt')
 
 st.sidebar.image("Embeds logo.png", use_column_width=True)
