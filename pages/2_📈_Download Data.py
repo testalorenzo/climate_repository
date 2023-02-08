@@ -42,7 +42,8 @@ with col4:
 if weight!="unweighted":
     with col5:
         weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting scheme')
-
+else:
+    weight_year = 2000
 
 # 2. Select the time period, the threshold and observations.
 
