@@ -22,7 +22,7 @@ Within the WCDR dashboard, the user can choose:
 * *Time resolution*: yearly vs. monthly observations can be employed;
 * *Threshold*: If activated, this option allows to specify a threshold type (percentile or absolute value) and a threshold value for the historical time-series of a geographic unit; only months whose climate-variable observations are over the threshold value are retained.
 
-Resulting data can be 
+Resulting data can be:
 * graphically explored as time series or using choropleth maps;
 * downloaded as *csv* or *json* files, in both **long** or **wide** data format.
 
