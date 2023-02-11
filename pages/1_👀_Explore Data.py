@@ -61,7 +61,7 @@ with plot1:
         col1, col2, col3 = st.columns(3)
         # Activate threshold customization
         with col1:
-            threshold_dummy = st.selectbox('Threshold dummy', ("True", "False"), index=1, help='Activate threshold customization', key = 'threshold_dummy_ts')
+            threshold_dummy = st.selectbox('Threshold', ("True", "False"), index=1, help='Activate threshold customization', key = 'threshold_dummy_ts')
         # Threshold customization
         if threshold_dummy == "True":
             with col2:
@@ -72,7 +72,7 @@ with plot1:
             threshold_kind = "percentile"
             threshold = 90
     else:
-        st.caption("Threshold dummy")
+        st.caption("Threshold")
         st.markdown("False")
 
     # Time frequency
@@ -108,17 +108,17 @@ with plot1:
         source = 'dela'
 
     # Preferences structure
-    tab1, tab3 = st.tabs(["Time", "Observations"])
+    # tab1, tab3 = st.tabs(["Time", "Observations"])
 
     # Time preferences
-    with tab1:
-        col1, col2 = st.columns(2)
-        # Starting year
-        with col1:
-            starting_year = st.slider('Starting year', min_year, max_year, min_year)
-        # Ending year
-        with col2:
-            ending_year = st.slider('Ending year', starting_year, max_year, max_year)
+    # with tab1:
+    col1, col2 = st.columns(2)
+    # Starting year
+    with col1:
+        starting_year = st.slider('Starting year', min_year, max_year, min_year)
+    # Ending year
+    with col2:
+        ending_year = st.slider('Ending year', starting_year, max_year, max_year)
 
 # Rename variables as to match datasets names
 if variable == 'temperature':
@@ -177,11 +177,13 @@ elif time_frequency == 'yearly' and threshold_dummy == 'True':
     data = pd.concat([observations, n_months_over_threshold], axis=1)
 
 # Observation filters
-with tab3:
-    observation_list = list(set((data.iloc[:, 0].values).tolist()))
-    options = st.multiselect('Select specific units of observations', observation_list + ['ALL'], 'ALL')
+# with tab3:
+# observation_list = list(set((data.iloc[:, 0].values).tolist()))
+# options = st.multiselect('Select specific units of observations', observation_list + ['ALL'], 'ALL')
 
 with plot1:
+    observation_list = list(set((data.iloc[:, 0].values).tolist()))
+    options = st.multiselect('Select specific units of observations', observation_list + ['ALL'], 'ALL')
     
     # 6.1 Plot time series
 
@@ -238,7 +240,7 @@ with plot2:
     col1, col2, col3 = st.columns(3)
     # Activate threshold customization
     with col1:
-        threshold_dummy2 = st.selectbox('Threshold dummy', ("True", "False"), index=1)
+        threshold_dummy2 = st.selectbox('Threshold', ("True", "False"), index=1)
     # Threshold customization
     if threshold_dummy2 == "True":
         with col2:
