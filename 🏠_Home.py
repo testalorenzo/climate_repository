@@ -6,9 +6,9 @@ st.markdown("# Welcome to the Weighted Climate Data Repository Dashboard")
 """
 The Weighted Climate Data Repository (WCDR) project provides a user-friendly dashboard to explore and download climate data weighted by measures of economic activity.
 The dashboard allows users to:
-* choose to retrieve raw climate data about temperature, precipitation and SPEI (Standardized Precipitation-Evapotranspiration Index) from different sources and geographical/time resolutions;
-* weight raw climate data using alternative gridded measures of economic activity;
-* explore and download the resulting dataset in a single, accessible, and organized repository in a flexible way.
+* Choose to retrieve raw climate data about temperature, precipitation and SPEI (Standardized Precipitation-Evapotranspiration Index) from different sources and geographical/time resolutions;
+* Weight raw climate data using alternative gridded measures of economic activity;
+* Explore and download the resulting dataset in a single, accessible, and organized repository in a flexible way.
 
 The project is run within the [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [EMbeDS](https://www.santannapisa.it/en/department-excellence/embeds) at [Sant'Anna School of Advanced Studies](https://www.santannapisa.it/en) (Pisa, Italy) by [Giorgio Fagiolo](https://sites.google.com/view/giorgiofagiolo/home), Marco Gortan, [Francesco Lamperti](http://www.francescolamperti.eu/) and [Lorenzo Testa](https://testalorenzo.github.io/).
 
@@ -23,8 +23,8 @@ Within the WCDR dashboard, the user can choose:
 * *Threshold*: If activated, this option allows to specify a threshold type (percentile or absolute value) and a threshold value for the historical time-series of a geographic unit; only months whose climate-variable observations are over the threshold value are retained.
 
 Resulting data can be:
-* graphically explored as time series or using choropleth maps;
-* downloaded as *csv* or *json* files, in both **long** or **wide** data format.
+* Graphically explored as time series or using choropleth maps;
+* Downloaded as *csv* or *json* files, in both **long** or **wide** data format.
 
 Users that want to run our pipelines on their own data are very welcome to reach us out!
 
