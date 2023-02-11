@@ -314,11 +314,8 @@ if time_frequency2 == 'yearly' and threshold_dummy2 == 'False':
         data2 = data2.iloc[:, gap2:]
         # days_by_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 31, 31]
         data2 = data2.groupby(np.arange(data2.shape[1])//12, axis=1).mean()
-    st.dataframe(data2)
     data2.columns = list(range(snapshot, snapshot + 1))
-    st.dataframe(data2)
     data2 = pd.concat([observations2, data2], axis=1)
-    st.dataframe(data2)
 
 elif time_frequency2 == 'yearly' and threshold_dummy2 == 'True':
     observations2 = data2.iloc[:, 0:gap2]
