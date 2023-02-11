@@ -81,11 +81,11 @@ with plot1:
         st.caption('Time frequency')
         st.markdown(time_frequency)
     elif threshold_dummy == 'True':
-        time_frequency = 'annual'
+        time_frequency = 'yearly'
         st.caption('Time frequency')
         st.markdown(time_frequency)
     else:
-        time_frequency = st.selectbox('Time frequency', ("annual", "monthly"), index=0, help='Time frequency of the data', key = 'time_frequency_ts')
+        time_frequency = st.selectbox('Time frequency', ("yearly", "monthly"), index=0, help='Time frequency of the data', key = 'time_frequency_ts')
 
 
     # 2.b Select the time period, the threshold and observations.
@@ -151,8 +151,8 @@ else:
 # Extract selected years
 data = data.iloc[:, list(range(gap)) + list(range((starting_year - min_year) * 12 + gap, (ending_year - min_year) * 12 + gap + 12))]
 
-# Summarize if time frequency is annual
-if time_frequency == 'annual' and threshold_dummy == 'False':
+# Summarize if time frequency is yearly
+if time_frequency == 'yearly' and threshold_dummy == 'False':
     observations = data.iloc[:, 0:gap]
     if variable == 'pre':
         data = data.iloc[:, gap:]
@@ -164,7 +164,7 @@ if time_frequency == 'annual' and threshold_dummy == 'False':
     data.columns = list(range(starting_year, ending_year + 1))
     data = pd.concat([observations, data], axis=1)
 
-elif time_frequency == 'annual' and threshold_dummy == 'True':
+elif time_frequency == 'yearly' and threshold_dummy == 'True':
     observations = data.iloc[:, 0:gap]
     data = data.iloc[:, gap:]
     if threshold_kind == 'percentile':
@@ -233,7 +233,7 @@ with plot2:
         with col5:
             weight_year2 = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting scheme')
     else:
-        weight2 = "NA"
+        weight_year2 = "NA"
     # Threshold settings
     col1, col2, col3 = st.columns(3)
     # Activate threshold customization
@@ -250,7 +250,7 @@ with plot2:
         threshold2 = 90
 
     # Time frequency
-    time_frequency2 = 'annual'
+    time_frequency2 = 'yearly'
     st.caption('Time frequency')
     st.markdown(time_frequency2)
 
@@ -304,8 +304,8 @@ gap2 = 1
 # Extract selected years
 data2 = data2.iloc[:, list(range(gap)) + list(range((snapshot - min_year2) * 12 + gap2, (snapshot - min_year2) * 12 + gap2 + 12))]
 
-# Summarize if time frequency is annual
-if time_frequency2 == 'annual' and threshold_dummy2 == 'False':
+# Summarize if time frequency is yearly
+if time_frequency2 == 'yearly' and threshold_dummy2 == 'False':
     observations2 = data2.iloc[:, 0:gap2]
     if variable2 == 'pre':
         data2 = data2.iloc[:, gap2:]
@@ -317,7 +317,7 @@ if time_frequency2 == 'annual' and threshold_dummy2 == 'False':
     data2.columns = list(range(snapshot, snapshot + 1))
     data2 = pd.concat([observations2, data2], axis=1)
 
-elif time_frequency2 == 'annual' and threshold_dummy2 == 'True':
+elif time_frequency2 == 'yearly' and threshold_dummy2 == 'True':
     observations2 = data2.iloc[:, 0:gap2]
     data2 = data2.iloc[:, gap2:]
     if threshold_kind2 == 'percentile':

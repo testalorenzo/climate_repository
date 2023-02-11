@@ -47,7 +47,7 @@ else:
 
 # 2. Select the time period, the threshold and observations.
 
-# Preferences structure
+# Preferences structure
 tab1, tab2 = st.tabs(["Time", "Threshold"])
 
 # Threshold settings
@@ -86,12 +86,12 @@ with tab1:
             st.markdown(time_frequency)
     elif threshold_dummy == 'True':
         with col3:
-            time_frequency = 'annual'
+            time_frequency = 'yearly'
             st.caption('Time frequency')
             st.markdown(time_frequency)
     else:
         with col3:
-            time_frequency = st.selectbox('Time frequency', ("annual", "monthly"), index=0)
+            time_frequency = st.selectbox('Time frequency', ("yearly", "monthly"), index=0)
 
 
 # 3. Consistency routine
@@ -124,7 +124,7 @@ elif source == 'CSIC':
         stop = True
     else:
         source = 'spei'
-else: # (UDelaware)
+else: # (UDelaware)
     min_year = 1900
     max_year = 2017
     if starting_year < min_year or ending_year > max_year:
@@ -149,7 +149,7 @@ elif weight == 'night lights':
 else:
     weight = ''
 
-# 4. Access data
+# 4. Access data
 
 # Extract data if consistency checks were passed
 if stop is False:
@@ -162,11 +162,11 @@ if stop is False:
     else:
         gap = 1
   
-    # Extract selected years
+    # Extract selected years
     data = data.iloc[:, list(range(gap)) + list(range((starting_year-min_year)*12 + gap, (ending_year-min_year)*12 + gap + 12))]
 
-    # Summarize if time frequency is annual
-    if time_frequency == 'annual' and threshold_dummy == 'False':
+    # Summarize if time frequency is yearly
+    if time_frequency == 'yearly' and threshold_dummy == 'False':
         observations = data.iloc[:, 0:gap]
         if variable == 'pre':
             data = data.iloc[:, gap:]
@@ -178,7 +178,7 @@ if stop is False:
         data.columns = list(range(starting_year, ending_year + 1))
         data = pd.concat([observations, data], axis=1)
 
-    elif time_frequency == 'annual' and threshold_dummy == 'True':
+    elif time_frequency == 'yearly' and threshold_dummy == 'True':
         observations = data.iloc[:, 0:gap]
         data = data.iloc[:, gap:]
         if threshold_kind == 'percentile':
