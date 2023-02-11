@@ -16,7 +16,7 @@ In the dashboard, the user can choose the **climate variable** of interest – a
 ## Climate variables
 The dashboard allows the user to choose: 
 * *Data source*: we currently support data from [Climatic Research Unit (CRU TS)](https://www.uea.ac.uk/groups-and-centres/climatic-research-unit), [Delaware Climate Office](https://climate.udel.edu/), [ECMWF's ERA5](https://www.ecmwf.int/) and [CSIC](https://spei.csic.es/index.html)
-* *Climate variable*: available climate variables are temperature and precipitation (monthly and annual observations) and SPEI (standardized precipitation-evapotranspiration index; monthly observations)
+* *Climate variable*: available climate variables are temperature and precipitation (monthly and yearly observations) and SPEI (standardized precipitation-evapotranspiration index; monthly observations)
 * *Geographical resolution*: data can be downloaded at both the [GADM](https://gadm.org/) geographical resolution of GADM0 (World countries) and GADM1 administrative areas (i.e. regions within World countries)
 * *Time range*: depending on the data source of climate variables, the user can set starting and ending years of time range of interest
 
