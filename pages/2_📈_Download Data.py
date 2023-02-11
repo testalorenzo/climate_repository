@@ -51,91 +51,67 @@ else:
 
 # 2. Select the time period, the threshold and observations.
 
-# Preferences structure
-tab1, tab2 = st.tabs(["Time", "Threshold"])
-
 # Threshold settings
-with tab2:
-    if variable != 'SPEI':
-        col1, col2, col3 = st.columns(3)
-        # Activate threshold customization
-        with col1:    
-            threshold_dummy = st.selectbox('Threshold dummy', ("True", "False"), index=1)
-        # Threshold customization
-        if threshold_dummy == "True":
-            with col2:
-                threshold_kind = st.selectbox('Threshold type', ("percentile", "absolute"), index=0)
-            with col3:
-                threshold = st.number_input('Threshold', value = 90)
-        else:
-            threshold_kind = "percentile"
-            threshold = 90
-    else:
-        st.warning('Warning: ' + variable + ' data do not allow for threshold customization' , icon="⚠️")
-
-# Time preferences
-with tab1:
+if variable != 'SPEI':
     col1, col2, col3 = st.columns(3)
-    # Starting year
+    # Activate threshold customization
     with col1:    
-        starting_year = st.slider('Starting year', 1900, 2021, 1971)
-    # Ending year
-    with col2:
-        ending_year = st.slider('Ending year', starting_year, 2021, 2017)
-    # Time frequency
-    if variable == 'SPEI':
+        threshold_dummy = st.selectbox('Threshold', ("True", "False"), index=1)
+    # Threshold customization
+    if threshold_dummy == "True":
+        with col2:
+            threshold_kind = st.selectbox('Threshold type', ("percentile", "absolute"), index=0)
         with col3:
-            time_frequency = 'monthly'
-            st.caption('Time frequency')
-            st.markdown(time_frequency)
-    elif threshold_dummy == 'True':
-        with col3:
-            time_frequency = 'yearly'
-            st.caption('Time frequency')
-            st.markdown(time_frequency)
+            threshold = st.number_input('Threshold', value = 90)
     else:
-        with col3:
-            time_frequency = st.selectbox('Time frequency', ("yearly", "monthly"), index=0)
+        threshold_kind = "percentile"
+        threshold = 90
+else:
+    st.warning('Warning: ' + variable + ' data do not allow for threshold customization' , icon="⚠️")
 
 
-# 3. Consistency routine
+# Time period, threshold and observations.
 
-# Start consistency routine
-stop = False
-
-# Check time consistency for each source
 if source == 'CRU TS':
     min_year = 1901
     max_year = 2020
-    if starting_year < min_year or ending_year > max_year:
-        st.warning('Warning: ' + source + ' data is available from ' + str(min_year) + ' until ' + str(max_year) + ' -- Please select an appropriate time window!', icon="⚠️")
-        stop = True
-    else:
-        source = 'cru'
+    source = 'cru'
 elif source == 'ERA5':
     min_year = 1979
     max_year = 2021
-    if starting_year < min_year or ending_year > max_year:
-        st.warning('Warning: ' + source + ' data is available from ' + str(min_year) + ' until ' + str(max_year) + ' -- Please select an appropriate time window!', icon="⚠️")
-        stop = True
-    else:
-        source = 'era'
+    source = 'era'
 elif source == 'CSIC':
     min_year = 1901
     max_year = 2020
-    if starting_year < min_year or ending_year > max_year:
-        st.warning('Warning: ' + source + ' data is available from ' + str(min_year) + ' until ' + str(max_year) + ' -- Please select an appropriate time window!', icon="⚠️")
-        stop = True
-    else:
-        source = 'spei'
+    source = 'spei'
 else: # (UDelaware)
     min_year = 1900
     max_year = 2017
-    if starting_year < min_year or ending_year > max_year:
-        st.warning('Warning: ' + source + ' data is available from ' + str(min_year) + ' until ' + str(max_year) + ' -- Please select an appropriate time window!', icon="⚠️")
-        stop = True
+    source = 'dela'
+
+
+# 3. Preferences structure
+
+# Time preferences
+col1, col2, col3 = st.columns(3)
+# Frequency
+with col1:
+    if variable == 'SPEI':
+        time_frequency = 'monthly'
+        st.caption('Time frequency')
+        st.markdown(time_frequency)
+    elif threshold_dummy == 'True':
+        time_frequency = 'yearly'
+        st.caption('Time frequency')
+        st.markdown(time_frequency)
     else:
-        source = 'dela'
+        time_frequency = st.selectbox('Time frequency', ("yearly", "monthly"), index = 0, help = 'Time frequency of the data', key = 'time_frequency_ts')
+# Starting year
+with col2:
+    starting_year = st.slider('Starting year', min_year, max_year, min_year)
+# Ending year
+with col3:
+    ending_year = st.slider('Ending year', starting_year, max_year, max_year)
 
 # Rename variables as to match datasets names
 if variable == 'temperature':
@@ -153,66 +129,48 @@ elif weight == 'night lights':
 else:
     weight = ''
 
+
 # 4. Access data
 
-# Extract data if consistency checks were passed
-if stop is False:
-    # Read data from GitHub
-    data = load_data(geo_resolution, variable, source, weight, weight_year)
+# Read data from GitHub
+data = load_data(geo_resolution, variable, source, weight, weight_year)
 
-    # Introduce gaps to fix columns
-    if geo_resolution == 'gadm1':
-        gap = 2
-    else:
-        gap = 1
-  
-    # Extract selected years
-    data = data.iloc[:, list(range(gap)) + list(range((starting_year-min_year)*12 + gap, (ending_year-min_year)*12 + gap + 12))]
+# Introduce gaps to fix columns
+if geo_resolution == 'gadm1':
+    gap = 2
+else:
+    gap = 1
 
-    # Summarize if time frequency is yearly
-    if time_frequency == 'yearly' and threshold_dummy == 'False':
-        observations = data.iloc[:, 0:gap]
-        if variable == 'pre':
-            data = data.iloc[:, gap:]
-            data = data.groupby(np.arange(data.shape[1])//12, axis=1).sum()
-        elif variable == 'tmp':
-            data = data.iloc[:, gap:]
-            # days_by_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 31, 31]
-            data = data.groupby(np.arange(data.shape[1])//12, axis=1).mean()
-        data.columns = list(range(starting_year, ending_year + 1))
-        data = pd.concat([observations, data], axis=1)
+# Extract selected years
+data = data.iloc[:, list(range(gap)) + list(range((starting_year-min_year)*12 + gap, (ending_year-min_year)*12 + gap + 12))]
 
-    elif time_frequency == 'yearly' and threshold_dummy == 'True':
-        observations = data.iloc[:, 0:gap]
+# Summarize if time frequency is yearly
+if time_frequency == 'yearly' and threshold_dummy == 'False':
+    observations = data.iloc[:, 0:gap]
+    if variable == 'pre':
         data = data.iloc[:, gap:]
-        if threshold_kind == 'percentile':
-            limit_values = data.quantile(q=threshold/100, axis=1)
-        else:
-            limit_values = threshold
-        months_over_threshold = data.gt(limit_values, axis=0)
-        n_months_over_threshold = months_over_threshold.groupby(np.arange(data.shape[1])//12, axis=1).sum()
-        n_months_over_threshold.columns = list(range(starting_year, ending_year + 1))
-        data = pd.concat([observations, n_months_over_threshold], axis=1)
+        data = data.groupby(np.arange(data.shape[1])//12, axis=1).sum()
+    elif variable == 'tmp':
+        data = data.iloc[:, gap:]
+        # days_by_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 31, 31]
+        data = data.groupby(np.arange(data.shape[1])//12, axis=1).mean()
+    data.columns = list(range(starting_year, ending_year + 1))
+    data = pd.concat([observations, data], axis=1)
+
+elif time_frequency == 'yearly' and threshold_dummy == 'True':
+    observations = data.iloc[:, 0:gap]
+    data = data.iloc[:, gap:]
+    if threshold_kind == 'percentile':
+        limit_values = data.quantile(q=threshold/100, axis=1)
+    else:
+        limit_values = threshold
+    months_over_threshold = data.gt(limit_values, axis=0)
+    n_months_over_threshold = months_over_threshold.groupby(np.arange(data.shape[1])//12, axis=1).sum()
+    n_months_over_threshold.columns = list(range(starting_year, ending_year + 1))
+    data = pd.concat([observations, n_months_over_threshold], axis=1)
 
 
-    # 5. Plot data
-
-    # data2 = data.iloc[:, gap:]
-    # data2.index = data.iloc[:, 0:gap]
-    # if time_frequency == 'monthly':
-    #     label_vector = [str(x) + "_" + str(y) for x in range(starting_year, ending_year + 1) for y in range(1,13)]
-    #     label_vector = pd.to_datetime(label_vector, format="%Y_%m")
-    # else:
-    #     label_vector = data2.columns
-    #     label_vector = pd.to_datetime(label_vector, format="%Y")
-    # data2.columns = label_vector
-
-    # # Plot settings
-    # alt.themes.enable("streamlit")
-    # st.line_chart(data2.T)
-
-
-# 6. Download data
+# 5. Download data
 
 col1, col2, col3 = st.columns(3)
 

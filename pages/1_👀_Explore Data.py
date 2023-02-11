@@ -56,6 +56,7 @@ with plot1:
             weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting scheme', key = 'weight_year_ts')
     else:
         weight_year = "NA"
+
     # Threshold settings
     if variable != 'SPEI':
         col1, col2, col3 = st.columns(3)
@@ -85,7 +86,7 @@ with plot1:
         st.caption('Time frequency')
         st.markdown(time_frequency)
     else:
-        time_frequency = st.selectbox('Time frequency', ("yearly", "monthly"), index=0, help='Time frequency of the data', key = 'time_frequency_ts')
+        time_frequency = st.selectbox('Time frequency', ("yearly", "monthly"), index = 0, help = 'Time frequency of the data', key = 'time_frequency_ts')
 
 
     # 2.b Select the time period, the threshold and observations.
@@ -108,10 +109,8 @@ with plot1:
         source = 'dela'
 
     # Preferences structure
-    # tab1, tab3 = st.tabs(["Time", "Observations"])
 
     # Time preferences
-    # with tab1:
     col1, col2 = st.columns(2)
     # Starting year
     with col1:
@@ -176,15 +175,12 @@ elif time_frequency == 'yearly' and threshold_dummy == 'True':
     n_months_over_threshold.columns = list(range(starting_year, ending_year + 1))
     data = pd.concat([observations, n_months_over_threshold], axis=1)
 
-# Observation filters
-# with tab3:
-# observation_list = list(set((data.iloc[:, 0].values).tolist()))
-# options = st.multiselect('Select specific units of observations', observation_list + ['ALL'], 'ALL')
 
 with plot1:
+    # Observation filters
     observation_list = list(set((data.iloc[:, 0].values).tolist()))
-    options = st.multiselect('Select specific units of observations', observation_list + ['ALL'], 'ALL')
-    
+    options = st.multiselect('Observations', observation_list + ['ALL'], 'ALL', help = 'Select specific units of observation')
+
     # 6.1 Plot time series
 
     data_plot = data.iloc[:, gap:]
@@ -192,7 +188,7 @@ with plot1:
     if 'ALL' in options:
         mask = pd.Series([True] * len(data_plot.index))
     else:
-        mask = pd.Series(data_plot.index).apply(lambda x: x[0]).isin(options) 
+        mask = pd.Series(data_plot.index).apply(lambda x: x[0]).isin(options)
     mask.index = data_plot.index
     data_plot = data_plot.loc[mask, :]
     if time_frequency == 'monthly':
