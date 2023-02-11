@@ -17,11 +17,11 @@ def load_data(geo_resolution, variable, source, weight, weight_year):
         imported_data = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight +'.csv', encoding='latin-1')
     return imported_data
 
+
 # Page title
 st.markdown("# Explore Data")
 
 # 1. Select the kind of graphical representation
-
 plot1, plot2 = st.tabs(["Time series", "Choropleth map"])
 
 # Time series plot
@@ -30,23 +30,23 @@ with plot1:
     # 2.a Select the geographical resolution, the climate variable, the variable source, the weighting scheme, the weighting year, threshold settings and time frequency
 
     # Filter structure
-    col1, col2, col3, col4, col5 = st.columns([1.3,1,1,1,1])
+    col1, col2, col3, col4, col5 = st.columns([1,1,1.3,1,1])
 
-    # Geographical resolution
+   # Climate variable
     with col1:
-        geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0, help='Geographical units of observation', key = 'geo_resolution_ts')
-    # Climate variable
-    with col2:
         variable = st.selectbox('Climate variable', ("temperature", "precipitation", "SPEI"), index=0, help='Measured climate variable of interest', key = 'variable_ts')
     # Variable source
     if variable != "SPEI":
-        with col3:
+        with col2:
             source = st.selectbox('Variable source', ("CRU TS", "ERA5", "UDelaware"), index=0, help='Source of data for the selected climate variable', key = 'source_ts')
     else:
-        with col3:
+        with col2:
             source = "CSIC"
             st.caption("Variable source")
             st.markdown(source)
+    # Geographical resolution
+    with col3:
+        geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0, help='Geographical units of observation', key = 'geo_resolution_ts')
     # Weighting scheme
     with col4:
         weight = st.selectbox('Weighting type', ('population density', 'night lights', 'unweighted'), index=0, help='Weighting scheme specification', key = 'weight_ts')
@@ -212,19 +212,19 @@ with plot2:
     # 2.b Select the geographical resolution, the climate variable, the variable source, the weighting scheme, the weighting year, threshold settings and time frequency
 
     # Filter structure
-    col1, col2, col3, col4, col5 = st.columns([1.3,1,1,1,1])
+    col1, col2, col3, col4, col5 = st.columns([1,1,1.3,1,1])
 
-    # Geographical resolution
+    # Climate variable
     with col1:
+        variable2 = st.selectbox('Climate variable', ("temperature", "precipitation"), index=0, help='Measured climate variable of interest')
+    # Variable source
+    with col2:
+        source2 = st.selectbox('Variable source', ("CRU TS", "ERA5", "UDelaware"), index=0, help='Source of data for the selected climate variable')
+    # Geographical resolution
+    with col3:
         geo_resolution2 = "gadm0"
         st.caption('Geographical resolution')
         st.markdown(geo_resolution2)
-    # Climate variable
-    with col2:
-        variable2 = st.selectbox('Climate variable', ("temperature", "precipitation"), index=0, help='Measured climate variable of interest')
-    # Variable source
-    with col3:
-        source2 = st.selectbox('Variable source', ("CRU TS", "ERA5", "UDelaware"), index=0, help='Source of data for the selected climate variable')
     # Weighting scheme
     with col4:
         weight2 = st.selectbox('Weighting type', ('population density', 'night lights', 'unweighted'), index=0, help='Weighting scheme specification')

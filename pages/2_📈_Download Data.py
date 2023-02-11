@@ -1,7 +1,10 @@
+# ------------ #
+# Download tab #
+# ------------ #
+
 import streamlit as st
 import pandas as pd
 import numpy as np
-import altair as alt
 
 @st.cache
 def load_data(geo_resolution, variable, source, weight, weight_year):
@@ -11,6 +14,7 @@ def load_data(geo_resolution, variable, source, weight, weight_year):
         data = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight +'.csv', encoding='latin-1')
     return data
 
+
 # Page title
 st.markdown("# Download Data")
 
@@ -18,23 +22,23 @@ st.markdown("# Download Data")
 # 1. Select the geographical resolution, the climate variable, the variable source, the weighting scheme and the weighting year.
 
 # Filter structure
-col1, col2, col3, col4, col5 = st.columns([1.3,1,1,1,1])
+col1, col2, col3, col4, col5 = st.columns([1,1,1.3,1,1])
 
-# Geographical resolution
-with col1:
-    geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0, help='Geographical units of observation')
 # Climate variable
-with col2:
+with col1:
     variable = st.selectbox('Climate variable', ("temperature", "precipitation", "SPEI"), index=0, help='Measured climate variable of interest')
 # Variable source
 if variable != "SPEI":
-    with col3:
+    with col2:
         source = st.selectbox('Variable source', ("CRU TS", "ERA5", "UDelaware"), index=0, help='Source of data for the selected climate variable')
 else:
-    with col3:
+    with col2:
         source = "CSIC"
         st.caption("Variable source")
         st.markdown(source)
+# Geographical resolution
+with col3:
+    geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0, help='Geographical units of observation')
 # Weighting scheme
 with col4:
     weight = st.selectbox('Weighting type', ('population density', 'night lights', 'unweighted'), index=0, help='Weighting scheme specification')
