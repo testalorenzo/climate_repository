@@ -22,7 +22,7 @@ st.markdown("# Download Data")
 # 1. Select the geographical resolution, the climate variable, the variable source, the weighting scheme and the weighting year.
 
 # Filter structure
-col1, col2, col3, col4, col5 = st.columns([1,1,1.3,1,1])
+col1, col2, col3, col4, col5 = st.columns([1,1,1.3,1.1,1])
 
 # Climate variable
 with col1:
@@ -41,11 +41,11 @@ with col3:
     geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0, help='Geographical units of observation')
 # Weighting scheme
 with col4:
-    weight = st.selectbox('Weighting type', ('population density', 'night lights', 'unweighted'), index=0, help='Weighting scheme specification')
+    weight = st.selectbox('Weighting variable', ('population density', 'night lights', 'unweighted'), index=0, help='Weighting variable specification')
 # Weighting year
 if weight!="unweighted":
     with col5:
-        weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting scheme')
+        weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting variable')
 else:
     weight_year = "NA"
 
@@ -192,7 +192,7 @@ with col2:
 with col3:
     st.download_button(label = "Download data", data = data, file_name = geo_resolution + '_' + source + '_' + variable + weight + '_data.' + download_extension)
 with col3:
-    meta_text = 'Metadata\n' + 'Geographic resolution: ' + geo_resolution + '\nVariable source: ' + source + '\nVariable: ' + variable + '\nWeight' + weight + '\nWeighting reference year'+ str(weight_year) + '\n\nRemember to cite our work!\nhttps://climaterepo.streamlit.app/'
+    meta_text = 'Metadata\n' + 'Geographic resolution: ' + geo_resolution + '\nClimate variable source: ' + source + '\nClimate variable: ' + variable + '\nWeighting variable: ' + weight + '\nWeighting base year: '+ str(weight_year) + '\n\nRemember to cite our work!\nhttps://climaterepo.streamlit.app/'
     st.download_button(label="Download metadata", data = meta_text, file_name= 'metadata.txt')
 
 st.sidebar.image("Embeds logo.png", use_column_width=True)

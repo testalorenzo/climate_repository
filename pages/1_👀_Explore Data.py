@@ -30,7 +30,7 @@ with plot1:
     # 2.a Select the geographical resolution, the climate variable, the variable source, the weighting scheme, the weighting year, threshold settings and time frequency
 
     # Filter structure
-    col1, col2, col3, col4, col5 = st.columns([1,1,1.3,1,1])
+    col1, col2, col3, col4, col5 = st.columns([1,1,1.3,1.1,1])
 
    # Climate variable
     with col1:
@@ -49,11 +49,11 @@ with plot1:
         geo_resolution = st.selectbox('Geographical resolution', ('gadm0', 'gadm1'), index=0, help='Geographical units of observation', key = 'geo_resolution_ts')
     # Weighting scheme
     with col4:
-        weight = st.selectbox('Weighting type', ('population density', 'night lights', 'unweighted'), index=0, help='Weighting scheme specification', key = 'weight_ts')
+        weight = st.selectbox('Weighting variable', ('population density', 'night lights', 'unweighted'), index=0, help='Weighting variable specification', key = 'weight_ts')
     # Weighting year
     if weight!="unweighted":
         with col5:
-            weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting scheme', key = 'weight_year_ts')
+            weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting variable', key = 'weight_year_ts')
     else:
         weight_year = "NA"
 
@@ -179,7 +179,11 @@ elif time_frequency == 'yearly' and threshold_dummy == 'True':
 with plot1:
     # Observation filters
     observation_list = list(set((data.iloc[:, 0].values).tolist()))
-    options = st.multiselect('Observations', observation_list + ['ALL'], 'ALL', help = 'Select specific units of observation')
+    if geo_resolution == 'gadm1':
+        widget_name = 'Regions'
+    else:
+        widget_name = 'Countries'
+    options = st.multiselect(widget_name, observation_list + ['ALL'], 'ALL', help = 'Choose the geographical units to show in the plot, depending on the geographical resolution chosen')
 
     # 6.1 Plot time series
 
@@ -210,7 +214,7 @@ with plot2:
     # 2.b Select the geographical resolution, the climate variable, the variable source, the weighting scheme, the weighting year, threshold settings and time frequency
 
     # Filter structure
-    col1, col2, col3, col4, col5 = st.columns([1,1,1.3,1,1])
+    col1, col2, col3, col4, col5 = st.columns([1,1,1.3,1.1,1])
 
     # Climate variable
     with col1:
@@ -225,11 +229,11 @@ with plot2:
         st.markdown(geo_resolution2)
     # Weighting scheme
     with col4:
-        weight2 = st.selectbox('Weighting type', ('population density', 'night lights', 'unweighted'), index=0, help='Weighting scheme specification')
+        weight2 = st.selectbox('Weighting variable', ('population density', 'night lights', 'unweighted'), index=0, help='Weighting variable specification')
     # Weighting year
     if weight2 != "unweighted":
         with col5:
-            weight_year2 = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting scheme')
+            weight_year2 = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting variable')
     else:
         weight_year2 = "NA"
     # Threshold settings
@@ -343,5 +347,13 @@ with plot2:
 
 
 # Side bar images
-st.sidebar.image("Embeds logo.png", use_column_width=True)
-st.sidebar.image("download.jpeg", use_column_width=True)
+# st.sidebar.image("Embeds logo.png", use_column_width=True)
+# st.sidebar.image("download.jpeg", use_column_width=True)
+with st.sidebar:
+    """
+    [Institute of Economics](https://www.santannapisa.it/en/istituto/economia)
+    Sant'Anna School of Advanced Studies (Pisa, Italy)
+
+    [EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
+    Economics and Management in the era of Data Science
+    """
