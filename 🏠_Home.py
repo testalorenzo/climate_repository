@@ -1,7 +1,7 @@
 import streamlit as st
 st.set_page_config(page_title="Weighted Climate Data Repository")
 
-st.markdown("# Welcome to the Weighted Climate Data Repository Dashboard")
+st.markdown("# Welcome to the Weighted Climate Data Repository Dashboard!")
 
 """
 The Weighted Climate Data Repository (WCDR) project provides a user-friendly dashboard to explore and download climate data weighted by measures of economic activity.
