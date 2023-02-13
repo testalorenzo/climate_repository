@@ -352,6 +352,5 @@ with plot2:
 with st.sidebar:
     """
     [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
-
     Sant'Anna School of Advanced Studies (Pisa, Italy)
     """
