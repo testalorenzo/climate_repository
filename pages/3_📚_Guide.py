@@ -15,5 +15,12 @@ st.warning("Page under construction!", icon="⚠️")
 * *threshold*: cutoff value.
 """
 
-st.sidebar.image("Embeds logo.png", use_column_width=True)
-st.sidebar.image("download.jpeg", use_column_width=True)
+# Side bar images
+# st.sidebar.image("Embeds logo.png", use_column_width=True)
+# st.sidebar.image("download.jpeg", use_column_width=True)
+with st.sidebar:
+    """
+    [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
+    
+    Sant'Anna School of Advanced Studies (Pisa, Italy)
+    """

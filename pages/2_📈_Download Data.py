@@ -195,5 +195,12 @@ with col3:
     meta_text = 'Metadata\n' + 'Geographic resolution: ' + geo_resolution + '\nClimate variable source: ' + source + '\nClimate variable: ' + variable + '\nWeighting variable: ' + weight + '\nWeighting base year: '+ str(weight_year) + '\n\nRemember to cite our work!\nhttps://climaterepo.streamlit.app/'
     st.download_button(label="Download metadata", data = meta_text, file_name= 'metadata.txt')
 
-st.sidebar.image("Embeds logo.png", use_column_width=True)
-st.sidebar.image("download.jpeg", use_column_width=True)
+# Side bar images
+# st.sidebar.image("Embeds logo.png", use_column_width=True)
+# st.sidebar.image("download.jpeg", use_column_width=True)
+with st.sidebar:
+    """
+    [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
+    
+    Sant'Anna School of Advanced Studies (Pisa, Italy)
+    """
