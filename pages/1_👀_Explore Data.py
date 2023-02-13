@@ -351,9 +351,7 @@ with plot2:
 # st.sidebar.image("download.jpeg", use_column_width=True)
 with st.sidebar:
     """
-    [Institute of Economics](https://www.santannapisa.it/en/istituto/economia)
-    Sant'Anna School of Advanced Studies (Pisa, Italy)
+    [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
 
-    [EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
-    Economics and Management in the era of Data Science
+    Sant'Anna School of Advanced Studies (Pisa, Italy)
     """
