@@ -183,6 +183,8 @@ with col1:
 		elif geo_resolution == 'gadm1':
 			data = pd.melt(data, id_vars=['ID_0', 'NAME_1'], var_name='time', value_name=variable)
 
+data_show = data
+
 with col2:
 	download_extension = st.selectbox('Download extension', ("csv", "json"), index=0)
 	if download_extension == 'csv':
@@ -195,6 +197,10 @@ with col3:
 with col3:
     meta_text = 'Metadata\n' + 'Geographic resolution: ' + geo_resolution + '\nClimate variable source: ' + source + '\nClimate variable: ' + variable + '\nWeighting variable: ' + weight + '\nWeighting base year: '+ str(weight_year) + '\n\nRemember to cite our work!\nhttps://climaterepo.streamlit.app/'
     st.download_button(label="Download metadata", data = meta_text, file_name= 'metadata.txt')
+
+# 6. Visualize data
+st.markdown('### Preview of the data')
+st.dataframe(data_show)
 
 # Side bar images
 # st.sidebar.image("Embeds logo.png", use_column_width=True)

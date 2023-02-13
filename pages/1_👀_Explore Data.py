@@ -203,10 +203,47 @@ with plot1:
         label_vector = data_plot.columns
         label_vector = pd.to_datetime(label_vector, format="%Y")
     data_plot.columns = label_vector
+    data_plot = data_plot.reset_index()
+    if geo_resolution == 'gadm0':
+        data_plot = pd.melt(data_plot, id_vars='index', var_name='time', value_name=variable)
+    else:
+        data_plot = pd.melt(data_plot, id_vars='index', var_name='time', value_name=variable)
 
     # Plot settings
     alt.themes.enable("streamlit")
-    st.line_chart(data_plot.T)
+
+    # Create a selection that chooses the nearest point & selects based on x-value
+    nearest = alt.selection(type='single', nearest=True, on='mouseover',
+                            fields=['time'], empty='none')
+
+    # The basic line
+    if 'ALL' in options:
+        line = alt.Chart(data_plot).mark_line(interpolate='basis').encode(
+            x= 'time',
+            y= variable,
+            color= alt.Color('index', legend=None)
+        )
+    else:
+        line = alt.Chart(data_plot).mark_line(interpolate='basis').encode(
+            x= 'time',
+            y= variable,
+            color= alt.Color('index')
+        )
+
+    # Transparent selectors across the chart. This is what tells us the x-value of the cursor
+    selectors = alt.Chart(data_plot).mark_point().encode(
+        x='time',
+        opacity=alt.value(0),
+    ).add_selection(
+        nearest
+    )
+
+    # Draw a rule at the location of the selection
+    rules = alt.Chart(data_plot).mark_rule(color='gray').encode(x='time').transform_filter(nearest)
+
+    # Put the layers into a chart and bind the data
+    ts_plot = alt.layer(line, selectors, rules)
+    st.altair_chart(ts_plot, use_container_width=True)
 
 
 # Map snapshot
