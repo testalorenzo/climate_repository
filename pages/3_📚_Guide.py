@@ -1,6 +1,7 @@
 import streamlit as st
 
-st.markdown("# Guide")
+st.markdown("# The Weighted Climate Data Repository")
+st.markdown("## Guide")
 st.warning("Page under construction!", icon="⚠️")
 
 """

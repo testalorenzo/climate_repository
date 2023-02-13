@@ -19,7 +19,8 @@ def load_data(geo_resolution, variable, source, weight, weight_year):
 
 
 # Page title
-st.markdown("# Explore Data")
+st.markdown("# The Weighted Climate Data Repository")
+st.markdown("## Explore Data")
 
 # 1. Select the kind of graphical representation
 plot1, plot2 = st.tabs(["Time series", "Choropleth map"])

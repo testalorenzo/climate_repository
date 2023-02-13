@@ -16,7 +16,8 @@ def load_data(geo_resolution, variable, source, weight, weight_year):
 
 
 # Page title
-st.markdown("# Download Data")
+st.markdown("# The Weighted Climate Data Repository")
+st.markdown("## Download Data")
 
 
 # 1. Select the geographical resolution, the climate variable, the variable source, the weighting scheme and the weighting year.
