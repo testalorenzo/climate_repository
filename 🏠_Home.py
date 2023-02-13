@@ -26,7 +26,7 @@ Resulting data can be:
 * Graphically explored as time series or using choropleth maps;
 * Downloaded as *csv* or *json* files, in both **long** or **wide** data format.
 
-Users that want to run our pipelines on their own data are very welcome to reach us out!
+Users willing to run our pipelines on their own data are very welcome to reach us out!
 
 Stay tuned for updates!
 """
