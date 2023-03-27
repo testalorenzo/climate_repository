@@ -297,7 +297,7 @@ with tab2:
         st.warning('No country selected')
     else:
         if geo_resolution == 'gadm0':
-            snapshot_data[snapshot_data.iso_a3.isin(opts)].plot(column=snapshot, ax=ax, legend=True, legend_kwds={'label': str(variable) + " in " + str(snapshot), 'orientation': "horizontal"})
+            snapshot_data.plot(column=snapshot, ax=ax, legend=True, legend_kwds={'label': str(variable) + " in " + str(snapshot), 'orientation': "horizontal"})
         else:
             snapshot_data[snapshot_data.ID_0.isin(opts)].plot(column=snapshot, ax=ax, legend=True, legend_kwds={'label': str(variable) + " in " + str(snapshot), 'orientation': "horizontal"})
     st.pyplot(fig=fig)
