@@ -21,7 +21,7 @@ st.warning("Page under construction!", icon="⚠️")
 # st.sidebar.image("download.jpeg", use_column_width=True)
 with st.sidebar:
     """
-    [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
+    [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [L'EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
     
     Sant'Anna School of Advanced Studies (Pisa, Italy)
     """

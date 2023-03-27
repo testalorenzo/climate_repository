@@ -8,6 +8,7 @@ import numpy as np
 import altair as alt
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import gpdvega
 
 @st.cache_data()
 def load_data(geo_resolution, variable, source, weight, weight_year):
@@ -205,7 +206,10 @@ elif time_frequency == 'yearly' and threshold_dummy == 'True':
     data = pd.concat([observations, n_months_over_threshold], axis=1)
 
 # Observation filters
-observation_list = list(set((data.iloc[:, 0].values).tolist()))
+world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+# observation_list = list(set((data.iloc[:, 0].values).tolist()))
+observation_list = world.name.tolist()
+observation_list.sort()
 if geo_resolution == 'gadm1':
     widget_name = 'Regions'
 else:
@@ -225,7 +229,9 @@ with tab1:
     if 'ALL' in options:
         mask = pd.Series([True] * len(data_plot.index))
     else:
-        mask = pd.Series(data_plot.index).apply(lambda x: x[0]).isin(options)
+        # mask = pd.Series(data_plot.index).apply(lambda x: x[0]).isin(options)
+        opts = world.loc[world.name.isin(options), 'iso_a3'].tolist()
+        mask = pd.Series(data_plot.index).apply(lambda x: x[0]).isin(opts)
     mask.index = data_plot.index
     data_plot = data_plot.loc[mask, :]
     if time_frequency == 'monthly':
@@ -295,7 +301,7 @@ with tab2:
 # st.sidebar.image("download.jpeg", use_column_width=True)
 with st.sidebar:
     """
-    [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
+    [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [L'EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
 
     Sant'Anna School of Advanced Studies (Pisa, Italy)
     """

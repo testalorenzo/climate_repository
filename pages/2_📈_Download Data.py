@@ -6,7 +6,7 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-@st.cache
+@st.cache_data()
 def load_data(geo_resolution, variable, source, weight, weight_year):
     if weight != "_un":
         data = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.csv', encoding='latin-1')
@@ -207,7 +207,7 @@ st.dataframe(data_show)
 # st.sidebar.image("download.jpeg", use_column_width=True)
 with st.sidebar:
     """
-    [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
+    [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [L'EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)
     
     Sant'Anna School of Advanced Studies (Pisa, Italy)
     """
