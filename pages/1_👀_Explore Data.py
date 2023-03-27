@@ -8,7 +8,6 @@ import numpy as np
 import altair as alt
 import geopandas as gpd
 import matplotlib.pyplot as plt
-import gpdvega
 
 @st.cache_data()
 def load_data(geo_resolution, variable, source, weight, weight_year):
@@ -290,9 +289,17 @@ with tab1:
 with tab2: 
     # st.dataframe(snapshot_data)
     snapshot_data = load_shapes(geo_resolution, data)
-    snapshot = st.slider('Snapshot year', min_year, max_year, min_year)
+    snapshot = st.slider('Snapshot year', starting_year, ending_year, starting_year)
     fig, ax = plt.subplots(1, 1)
-    snapshot_data.plot(column=snapshot, ax=ax, legend=True, legend_kwds={'label': str(variable) + " by Country in " + str(snapshot), 'orientation': "horizontal"})
+    if 'ALL' in options:
+        snapshot_data.plot(column=snapshot, ax=ax, legend=True, legend_kwds={'label': str(variable) + " in " + str(snapshot), 'orientation': "horizontal"})
+    elif options == []:
+        st.warning('No country selected')
+    else:
+        if geo_resolution == 'gadm0':
+            snapshot_data[snapshot_data.iso_a3.isin(opts)].plot(column=snapshot, ax=ax, legend=True, legend_kwds={'label': str(variable) + " in " + str(snapshot), 'orientation': "horizontal"})
+        else:
+            snapshot_data[snapshot_data.ID_0.isin(opts)].plot(column=snapshot, ax=ax, legend=True, legend_kwds={'label': str(variable) + " in " + str(snapshot), 'orientation': "horizontal"})
     st.pyplot(fig=fig)
 
 
