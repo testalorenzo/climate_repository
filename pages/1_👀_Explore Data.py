@@ -8,9 +8,12 @@ import numpy as np
 import altair as alt
 import geopandas as gpd
 import matplotlib.pyplot as plt
+import plotly.express as px
+import json
+
 
 @st.cache_data()
-def load_data(geo_resolution, variable, source, weight, weight_year):
+def load_data(geo_resolution, variable, source, weight, weight_year, col_range, row_range):
     """
     Load data from the repository and return a pandas dataframe
 
@@ -25,33 +28,40 @@ def load_data(geo_resolution, variable, source, weight, weight_year):
     imported_data (pandas dataframe): Dataframe containing the data
     """
     if weight != "_un":
-        imported_data = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.csv', encoding='latin-1')
+        link = 'https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.csv'
     else:
-        imported_data = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight +'.csv', encoding='latin-1')
+        link = 'https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '.csv'
+    imported_data = pd.read_csv(link, iterator = True, chunksize = 1000, encoding = 'latin-1', usecols = col_range, skiprows = row_range)
+    imported_data = pd.concat(imported_data, ignore_index=True)
     return imported_data
 
 @st.cache_data()
-def load_shapes(geo_resolution, snapshot_data):
+def load_shapes(geo_resolution):
     """
     Load shapefiles from the repository and return a geopandas dataframe
 
     Parameters:
     geo_resolution (str): Geographical resolution of the data
-    snapshot_data (pandas dataframe): Dataframe containing the data
 
     Returns:
     world (geopandas dataframe): Geopandas dataframe containing the gadm0 shapes
+
     """
     if geo_resolution == 'gadm0':
-        world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-        snapshot_data = world.merge(snapshot_data, left_on='iso_a3', right_on='iso3')
+        world = gpd.read_file('https://github.com/testalorenzo/climate_repository/blob/main/poly/gadm0.gpkg?raw=true')
+        world.index = world.iso3
+        world_json = world.to_json()
+        world_json = json.loads(world_json)
     else:
         world = gpd.read_file('https://github.com/testalorenzo/climate_repository/blob/main/poly/simplified_gadm1.gpkg?raw=true')
-        snapshot_data = gpd.GeoDataFrame(pd.concat([world.geometry, snapshot_data], axis = 1))
-    return snapshot_data
+        world.index = world.NAME_1
+        world_json = world.to_json()
+        world_json = json.loads(world_json)
+    return world.reset_index(drop=True), world_json
 
 
 # Page title
+st.set_page_config(page_title="Weighted Climate Data Repository", page_icon="🌎", initial_sidebar_state="expanded")
 st.markdown("# The Weighted Climate Data Repository")
 st.markdown("## Explore Data")
 
@@ -168,9 +178,6 @@ elif weight == 'night lights':
 else:
     weight = ''
 
-# Read data from GitHub
-data = load_data(geo_resolution, variable, source, weight, weight_year)
-
 # Introduce gaps to fix columns
 if geo_resolution == 'gadm1':
     gap = 2
@@ -178,7 +185,31 @@ else:
     gap = 1
 
 # Extract selected years
-data = data.iloc[:, list(range(gap)) + list(range((starting_year - min_year) * 12 + gap, (ending_year - min_year) * 12 + gap + 12))]
+col_range = list(range(gap)) + list(range((starting_year - min_year) * 12 + gap, (ending_year - min_year) * 12 + gap + 12))
+
+# Observation filters
+world0 = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+# observation_list = list(set((data.iloc[:, 0].values).tolist()))
+observation_list = world0.name.tolist()
+observation_list.sort()
+options = st.multiselect('Countries', ['ALL'] + observation_list, default='United States of America', help = 'Choose the geographical units to show in the plot, depending on the geographical resolution chosen')
+
+# Build row range
+world, world_json = load_shapes(geo_resolution)
+if 'ALL' in options:
+    row_range = []
+else:
+    opts = world0.loc[world0.name.isin(options), 'iso_a3'].tolist()
+    if geo_resolution == 'gadm0':
+        loc_id = 'iso3'
+    else:
+        loc_id = 'ID_0'
+    row_range = list(world[~world[loc_id].isin(opts)].index) + [0]
+    row_range = list(map(lambda x: x + 1, row_range))
+    row_range.pop(0)
+
+# Read data from GitHub
+data = load_data(geo_resolution, variable, source, weight, weight_year, col_range, row_range)
 
 # Summarize if time frequency is yearly
 if time_frequency == 'yearly' and threshold_dummy == 'False':
@@ -204,18 +235,6 @@ elif time_frequency == 'yearly' and threshold_dummy == 'True':
     n_months_over_threshold.columns = list(range(starting_year, ending_year + 1))
     data = pd.concat([observations, n_months_over_threshold], axis=1)
 
-# Observation filters
-world = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
-# observation_list = list(set((data.iloc[:, 0].values).tolist()))
-observation_list = world.name.tolist()
-observation_list.sort()
-if geo_resolution == 'gadm1':
-    widget_name = 'Regions'
-else:
-    widget_name = 'Countries'
-options = st.multiselect(widget_name, observation_list + ['ALL'], 'ALL', help = 'Choose the geographical units to show in the plot, depending on the geographical resolution chosen')
-
-
 tab1, tab2 = st.tabs(['Time series', 'Choropleth map'])
 
 # ---------------- #
@@ -225,14 +244,6 @@ tab1, tab2 = st.tabs(['Time series', 'Choropleth map'])
 with tab1: 
     data_plot = data.iloc[:, gap:]
     data_plot.index = data.iloc[:, 0:gap]
-    if 'ALL' in options:
-        mask = pd.Series([True] * len(data_plot.index))
-    else:
-        # mask = pd.Series(data_plot.index).apply(lambda x: x[0]).isin(options)
-        opts = world.loc[world.name.isin(options), 'iso_a3'].tolist()
-        mask = pd.Series(data_plot.index).apply(lambda x: x[0]).isin(opts)
-    mask.index = data_plot.index
-    data_plot = data_plot.loc[mask, :]
     if time_frequency == 'monthly':
         label_vector = [str(x) + "_" + str(y) for x in range(starting_year, ending_year + 1) for y in range(1,13)]
         label_vector = pd.to_datetime(label_vector, format="%Y_%m")
@@ -255,25 +266,12 @@ with tab1:
 
     # The basic line
     if 'ALL' in options:
-        line = alt.Chart(data_plot).mark_line(interpolate='basis').encode(
-            x= 'time',
-            y= variable,
-            color= alt.Color('index', legend=None)
-        )
+        line = alt.Chart(data_plot).mark_line(interpolate='basis').encode(x= 'time', y= variable, color= alt.Color('index', legend=None))
     else:
-        line = alt.Chart(data_plot).mark_line(interpolate='basis').encode(
-            x= 'time',
-            y= variable,
-            color= alt.Color('index')
-        )
+        line = alt.Chart(data_plot).mark_line(interpolate='basis').encode(x= 'time', y= variable, color= alt.Color('index'))
 
     # Transparent selectors across the chart. This is what tells us the x-value of the cursor
-    selectors = alt.Chart(data_plot).mark_point().encode(
-        x='time',
-        opacity=alt.value(0),
-    ).add_selection(
-        nearest
-    )
+    selectors = alt.Chart(data_plot).mark_point().encode(x='time', opacity=alt.value(0)).add_selection(nearest)
 
     # Draw a rule at the location of the selection
     rules = alt.Chart(data_plot).mark_rule(color='gray').encode(x='time').transform_filter(nearest)
@@ -287,21 +285,20 @@ with tab1:
 # ------------------- #
 
 with tab2: 
-    # st.dataframe(snapshot_data)
-    snapshot_data = load_shapes(geo_resolution, data)
-    snapshot = st.slider('Snapshot year', starting_year, ending_year, starting_year)
-    fig, ax = plt.subplots(1, 1)
-    if 'ALL' in options:
-        snapshot_data.plot(column=snapshot, ax=ax, legend=True, legend_kwds={'label': str(variable) + " in " + str(snapshot), 'orientation': "horizontal"})
-    elif options == []:
+    snapshot = st.slider('Snapshot year', starting_year, ending_year, starting_year, 1, help = 'Choose the year to show in the plot')
+    if geo_resolution == 'gadm0':
+        snapshot_data = world.merge(data, on='iso3')
+        # snapshot_data = pd.melt(snapshot_data, id_vars=['iso3', 'geometry'])
+    else:
+        snapshot_data = world.loc[:,['ID_0', 'NAME_1', 'geometry']].merge(data, on=['ID_0', 'NAME_1'])
+        # snapshot_data = pd.melt(snapshot_data, id_vars=['ID_0', 'NAME_1', 'geometry'])
+
+    if options == []:
         st.warning('No country selected')
     else:
-        if geo_resolution == 'gadm0':
-            snapshot_data.plot(column=snapshot, ax=ax, legend=True, legend_kwds={'label': str(variable) + " in " + str(snapshot), 'orientation': "horizontal"})
-        else:
-            snapshot_data[snapshot_data.ID_0.isin(opts)].plot(column=snapshot, ax=ax, legend=True, legend_kwds={'label': str(variable) + " in " + str(snapshot), 'orientation': "horizontal"})
-    st.pyplot(fig=fig)
-
+        fig = px.choropleth_mapbox(snapshot_data, geojson=snapshot_data.geometry, locations=snapshot_data.index, color = int(snapshot), #color='value', animation_frame="variable",
+                                   color_continuous_scale="Viridis", mapbox_style="carto-positron", zoom=1, opacity=0.5)
+    st.plotly_chart(fig, use_container_width=True)
 
 # Side bar images
 # st.sidebar.image("Embeds logo.png", use_column_width=True)

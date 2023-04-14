@@ -16,6 +16,7 @@ def load_data(geo_resolution, variable, source, weight, weight_year):
 
 
 # Page title
+st.set_page_config(page_title="Weighted Climate Data Repository", page_icon="🌎", initial_sidebar_state="expanded")
 st.markdown("# The Weighted Climate Data Repository")
 st.markdown("## Download Data")
 

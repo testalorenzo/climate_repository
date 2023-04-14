@@ -1,5 +1,6 @@
 import streamlit as st
 
+st.set_page_config(page_title="Weighted Climate Data Repository", page_icon="🌎", initial_sidebar_state="expanded")
 st.markdown("# The Weighted Climate Data Repository")
 st.markdown("## Contacts")
 
