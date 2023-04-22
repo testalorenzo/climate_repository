@@ -260,25 +260,25 @@ with tab1:
     # Plot settings
     alt.themes.enable("streamlit")
 
-    # Create a selection that chooses the nearest point & selects based on x-value
-    nearest = alt.selection(type='single', nearest=True, on='mouseover',
-                            fields=['time'], empty='none')
+    highlight = alt.selection(type='single', on='mouseover', fields=['index'], nearest=True)
 
-    # The basic line
-    if 'ALL' in options:
-        line = alt.Chart(data_plot).mark_line(interpolate='basis').encode(x= 'time', y= variable, color= alt.Color('index', legend=None))
-    else:
-        line = alt.Chart(data_plot).mark_line(interpolate='basis').encode(x= 'time', y= variable, color= alt.Color('index'))
+    base = alt.Chart(data_plot).mark_line().encode(
+        x=alt.X('time'),
+        y=alt.Y(variable),
+        color=alt.Color('index')).interactive()
 
-    # Transparent selectors across the chart. This is what tells us the x-value of the cursor
-    selectors = alt.Chart(data_plot).mark_point().encode(x='time', opacity=alt.value(0)).add_selection(nearest)
+    points = alt.Chart(data_plot).mark_circle().encode(
+        opacity=alt.value(0),
+        tooltip=[
+            alt.Tooltip('time', title='time'),
+            alt.Tooltip(variable, title=variable),
+            alt.Tooltip('index', title='index')
+        ]).add_selection(highlight)
 
-    # Draw a rule at the location of the selection
-    rules = alt.Chart(data_plot).mark_rule(color='gray').encode(x='time').transform_filter(nearest)
+    # lines = alt.Chart(data_plot).mark_line().encode(size=alt.condition(highlight, alt.value(1), alt.value(3)))
 
-    # Put the layers into a chart and bind the data
-    ts_plot = alt.layer(line, selectors, rules)
-    st.altair_chart(ts_plot, use_container_width=True)
+    ts_plot = alt.layer(base, points)
+    st.altair_chart(base, use_container_width=True)
 
 # ------------------- #
 # Plot choropleth map #
