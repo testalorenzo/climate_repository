@@ -262,12 +262,12 @@ with tab1:
 
     highlight = alt.selection(type='single', on='mouseover', fields=['index'], nearest=True)
 
-    base = alt.Chart(data_plot).mark_line().encode(
+    base = alt.Chart(data_plot).encode(
         x=alt.X('time'),
         y=alt.Y(variable),
-        color=alt.Color('index')).interactive()
+        color=alt.Color('index', scale=alt.Scale(scheme='viridis')))
 
-    points = alt.Chart(data_plot).mark_circle().encode(
+    points = base.mark_circle().encode(
         opacity=alt.value(0),
         tooltip=[
             alt.Tooltip('time', title='time'),
@@ -275,10 +275,12 @@ with tab1:
             alt.Tooltip('index', title='index')
         ]).add_selection(highlight)
 
-    # lines = alt.Chart(data_plot).mark_line().encode(size=alt.condition(highlight, alt.value(1), alt.value(3)))
+    # lines = base.mark_line().encode(size=alt.condition(~highlight, alt.value(1), alt.value(3)))
+    lines = base.mark_line().encode(size=alt.value(1.5))
 
-    ts_plot = alt.layer(base, points)
-    st.altair_chart(base, use_container_width=True)
+    ts_plot = (points + lines).interactive()
+
+    st.altair_chart(ts_plot, use_container_width=True)
 
 # ------------------- #
 # Plot choropleth map #
