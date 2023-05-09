@@ -294,7 +294,7 @@ with tab1:
 with tab2: 
     snapshot = st.slider('Snapshot year', starting_year, ending_year, starting_year, 1, help = 'Choose the year to show in the plot')
     if geo_resolution == 'gadm0':
-        snapshot_data = world.merge(data, on='GID_0')
+        snapshot_data = world.merge(data, left_on='GID_0', right_on='iso3')
         # snapshot_data = pd.melt(snapshot_data, id_vars=['iso3', 'geometry'])
     else:
         snapshot_data = world.loc[:,['GID_0', 'NAME_1', 'geometry']].merge(data, on=['GID_0', 'NAME_1'])
