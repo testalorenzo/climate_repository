@@ -45,11 +45,10 @@ def load_shapes(geo_resolution):
 
     Returns:
     world (geopandas dataframe): Geopandas dataframe containing the gadm0 shapes
-
     """
     if geo_resolution == 'gadm0':
-        world = gpd.read_file('https://github.com/testalorenzo/climate_repository/blob/main/poly/gadm0.gpkg?raw=true')
-        world.index = world.iso3
+        world = gpd.read_file('https://github.com/testalorenzo/climate_repository/blob/main/poly/simplified_gadm0.gpkg?raw=true')
+        world.index = world.GID_0
         world_json = world.to_json()
         world_json = json.loads(world_json)
     else:
@@ -59,9 +58,19 @@ def load_shapes(geo_resolution):
         world_json = json.loads(world_json)
     return world.reset_index(drop=True), world_json
 
+@st.cache_data()
+def load_country_list():
+    """
+    Load country list from the repository and return a pandas dataframe
+
+    Returns:
+    country_list (pandas dataframe): Dataframe containing the country list
+    """
+    country_list = pd.read_csv('https://github.com/testalorenzo/climate_repository/blob/main/poly/country_list.csv?raw=true')
+    return country_list
 
 # Page title
-st.set_page_config(page_title="Weighted Climate Data Repository", page_icon="🌎", initial_sidebar_state="expanded")
+st.set_page_config(page_title="Weighted Climate Data Repository", page_icon="🌎")
 st.markdown("# The Weighted Climate Data Repository")
 st.markdown("## Explore Data")
 
@@ -135,11 +144,11 @@ else:
 # Time period, threshold and observations
 if source == 'CRU TS':
     min_year = 1901
-    max_year = 2020
+    max_year = 2022
     source = 'cru'
 elif source == 'ERA5':
-    min_year = 1979
-    max_year = 2021
+    min_year = 1940
+    max_year = 2022
     source = 'era'
 elif source == 'CSIC':
     min_year = 1901
@@ -188,23 +197,19 @@ else:
 col_range = list(range(gap)) + list(range((starting_year - min_year) * 12 + gap, (ending_year - min_year) * 12 + gap + 12))
 
 # Observation filters
-world0 = gpd.read_file(gpd.datasets.get_path('naturalearth_lowres'))
+world0 = load_country_list()
 # observation_list = list(set((data.iloc[:, 0].values).tolist()))
-observation_list = world0.name.tolist()
+observation_list = world0.COUNTRY.unique().tolist()
 observation_list.sort()
-options = st.multiselect('Countries', ['ALL'] + observation_list, default='United States of America', help = 'Choose the geographical units to show in the plot, depending on the geographical resolution chosen')
+options = st.multiselect('Countries', ['ALL'] + observation_list, default='United States', help = 'Choose the geographical units to show in the plot')
 
 # Build row range
 world, world_json = load_shapes(geo_resolution)
 if 'ALL' in options:
     row_range = []
 else:
-    opts = world0.loc[world0.name.isin(options), 'iso_a3'].tolist()
-    if geo_resolution == 'gadm0':
-        loc_id = 'iso3'
-    else:
-        loc_id = 'ID_0'
-    row_range = list(world[~world[loc_id].isin(opts)].index) + [0]
+    opts = world0.loc[world0.COUNTRY.isin(options), 'GID_0'].tolist()
+    row_range = list(world[~world['GID_0'].isin(opts)].index) + [0]
     row_range = list(map(lambda x: x + 1, row_range))
     row_range.pop(0)
 
@@ -289,10 +294,10 @@ with tab1:
 with tab2: 
     snapshot = st.slider('Snapshot year', starting_year, ending_year, starting_year, 1, help = 'Choose the year to show in the plot')
     if geo_resolution == 'gadm0':
-        snapshot_data = world.merge(data, on='iso3')
+        snapshot_data = world.merge(data, on='GID_0')
         # snapshot_data = pd.melt(snapshot_data, id_vars=['iso3', 'geometry'])
     else:
-        snapshot_data = world.loc[:,['ID_0', 'NAME_1', 'geometry']].merge(data, on=['ID_0', 'NAME_1'])
+        snapshot_data = world.loc[:,['GID_0', 'NAME_1', 'geometry']].merge(data, on=['GID_0', 'NAME_1'])
         # snapshot_data = pd.melt(snapshot_data, id_vars=['ID_0', 'NAME_1', 'geometry'])
 
     if options == []:
