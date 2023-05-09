@@ -292,18 +292,19 @@ with tab1:
 # ------------------- #
 
 with tab2: 
-    snapshot = st.slider('Snapshot year', starting_year, ending_year, starting_year, 1, help = 'Choose the year to show in the plot')
+    snapshot = st.slider('Snapshot year', starting_year, ending_year, starting_year, 1, help = 'Choose the year to show in the plot')    
+    snapshot_data = world[world.GID_0.isin(opts)]
+    snapshot_data['snapshot'] = data[int(snapshot)].values
+
     if geo_resolution == 'gadm0':
-        snapshot_data = world.merge(data, left_on='GID_0', right_on='iso3')
-        # snapshot_data = pd.melt(snapshot_data, id_vars=['iso3', 'geometry'])
+        snapshot_data.set_index('GID_0', inplace=True)
     else:
-        snapshot_data = world.loc[:,['GID_0', 'NAME_1', 'geometry']].merge(data, on=['GID_0', 'NAME_1'])
-        # snapshot_data = pd.melt(snapshot_data, id_vars=['ID_0', 'NAME_1', 'geometry'])
+        snapshot_data.set_index('NAME_1', inplace=True)
 
     if options == []:
         st.warning('No country selected')
     else:
-        fig = px.choropleth_mapbox(snapshot_data, geojson=snapshot_data.geometry, locations=snapshot_data.index, color = int(snapshot), #color='value', animation_frame="variable",
+        fig = px.choropleth_mapbox(snapshot_data, geojson = snapshot_data.geometry, locations = snapshot_data.index, color = 'snapshot', #color='value', animation_frame="variable",
                                    color_continuous_scale="Viridis", mapbox_style="carto-positron", zoom=1, opacity=0.5)
     st.plotly_chart(fig, use_container_width=True)
 
