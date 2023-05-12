@@ -72,15 +72,14 @@ else:
     st.warning('Warning: ' + variable + ' data do not allow for threshold customization' , icon="⚠️")
 
 
-# Time period, threshold and observations.
-
+# Time period, threshold and observations
 if source == 'CRU TS':
     min_year = 1901
-    max_year = 2020
+    max_year = 2022
     source = 'cru'
 elif source == 'ERA5':
-    min_year = 1979
-    max_year = 2021
+    min_year = 1940
+    max_year = 2022
     source = 'era'
 elif source == 'CSIC':
     min_year = 1901
