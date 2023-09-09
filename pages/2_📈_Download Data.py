@@ -177,7 +177,10 @@ elif time_frequency == 'yearly' and threshold_dummy == 'True':
 # 5. Download data
 if geo_resolution == 'gadm1':
     gadm1 = load_gadm1()
-    data_show = pd.merge(gadm1, data, on=['ID_0', 'NAME_1'], how='right')
+    data = pd.merge(data, gadm1, on=['GID_0', 'NAME_1'], how='left')
+    cols = data.columns.tolist()
+    cols = cols[0:2] + [cols[-1]] + cols[2:-2]
+    data = data[cols]
 
 col1, col2, col3 = st.columns(3)
 
@@ -187,7 +190,7 @@ with col1:
 		if geo_resolution == 'gadm0':
 			data = pd.melt(data, id_vars='iso3', var_name='time', value_name=variable)
 		elif geo_resolution == 'gadm1':
-			data = pd.melt(data, id_vars=['ID_0', 'GID_1', 'NAME_1'], var_name='time', value_name=variable)
+			data = pd.melt(data, id_vars=['GID_0', 'GID_1', 'NAME_1'], var_name='time', value_name=variable)
 
 
 data_show = data
