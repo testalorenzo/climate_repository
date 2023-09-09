@@ -14,6 +14,9 @@ def load_data(geo_resolution, variable, source, weight, weight_year):
         data = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight +'.csv', encoding='latin-1')
     return data
 
+def load_gadm1():
+    data = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/poly/gadm1_adm.csv', encoding='latin-1')
+    return data
 
 # Page title
 st.set_page_config(page_title="Weighted Climate Data Repository", page_icon="🌎", initial_sidebar_state="expanded")
@@ -181,10 +184,12 @@ with col1:
 		if geo_resolution == 'gadm0':
 			data = pd.melt(data, id_vars='iso3', var_name='time', value_name=variable)
 		elif geo_resolution == 'gadm1':
-			data = pd.melt(data, id_vars=['ID_0', 'NAME_1'], var_name='time', value_name=variable)
+            gadm1 = load_gadm1()
+            data = pd.merge(gadm1, data, on=['GID_0', 'NAME_1'], how='right')
+			data = pd.melt(data, id_vars=['GID_0', 'GID_1', 'NAME_1'], var_name='time', value_name=variable)
 
 data_show = data
-
+    
 with col2:
 	download_extension = st.selectbox('Download extension', ("csv", "json"), index=0)
 	if download_extension == 'csv':
