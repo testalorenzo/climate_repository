@@ -15,8 +15,8 @@ def load_data(geo_resolution, variable, source, weight, weight_year):
     return data
 
 def load_gadm1():
-    data = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/poly/gadm1_adm.csv', encoding='latin-1')
-    return data
+    dta = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/poly/gadm1_adm.csv', encoding='latin-1')
+    return dta
 
 # Page title
 st.set_page_config(page_title="Weighted Climate Data Repository", page_icon="🌎", initial_sidebar_state="expanded")
