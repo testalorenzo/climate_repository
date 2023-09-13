@@ -28,9 +28,10 @@ def load_data(geo_resolution, variable, source, weight, weight_year, col_range, 
     imported_data (pandas dataframe): Dataframe containing the data
     """
     if weight != "_un":
-        link = 'https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.csv'
+        #link = 'https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.csv'
+        link = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.csv'
     else:
-        link = 'https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '.csv'
+        #link = 'https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '.csv'
         link = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '.csv'
     imported_data = pd.read_csv(link, iterator = True, chunksize = 1000, encoding = 'latin-1', usecols = col_range, skiprows = row_range)
     imported_data = pd.concat(imported_data, ignore_index=True)
