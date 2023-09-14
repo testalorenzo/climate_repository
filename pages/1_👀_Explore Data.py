@@ -28,10 +28,10 @@ def load_data(geo_resolution, variable, source, weight, weight_year, col_range, 
     imported_data (pandas dataframe): Dataframe containing the data
     """
     if weight != "_un":
-        #link = 'https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.csv'
+        # link = 'https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.csv'
         link = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.csv'
     else:
-        #link = 'https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '.csv'
+        # link = 'https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '.csv'
         link = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '.csv'
     imported_data = pd.read_csv(link, iterator = True, chunksize = 1000, encoding = 'latin-1', usecols = col_range, skiprows = row_range)
     imported_data = pd.concat(imported_data, ignore_index=True)
@@ -49,12 +49,14 @@ def load_shapes(geo_resolution):
     world (geopandas dataframe): Geopandas dataframe containing the gadm0 shapes
     """
     if geo_resolution == 'gadm0':
-        world = gpd.read_file('https://github.com/testalorenzo/climate_repository/blob/main/poly/simplified_gadm0.gpkg?raw=true')
+        # world = gpd.read_file('https://github.com/testalorenzo/climate_repository/blob/main/poly/simplified_gadm0.gpkg?raw=true')
+        world = gpd.read_file('./poly/simplified_gadm0.gpkg')
         world.index = world.GID_0
         world_json = world.to_json()
         world_json = json.loads(world_json)
     else:
-        world = gpd.read_file('https://github.com/testalorenzo/climate_repository/blob/main/poly/simplified_gadm1.gpkg?raw=true')
+        # world = gpd.read_file('https://github.com/testalorenzo/climate_repository/blob/main/poly/simplified_gadm1.gpkg?raw=true')
+        world = gpd.read_file('./poly/simplified_gadm1.gpkg')
         world.index = world.NAME_1
         world_json = world.to_json()
         world_json = json.loads(world_json)
@@ -68,7 +70,8 @@ def load_country_list():
     Returns:
     country_list (pandas dataframe): Dataframe containing the country list
     """
-    country_list = pd.read_csv('https://github.com/testalorenzo/climate_repository/blob/main/poly/country_list.csv?raw=true')
+    # country_list = pd.read_csv('https://github.com/testalorenzo/climate_repository/blob/main/poly/country_list.csv?raw=true')
+    country_list = pd.read_csv('./poly/country_list.csv?raw=true')
     return country_list
 
 # Page title
