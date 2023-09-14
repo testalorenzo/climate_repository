@@ -71,7 +71,7 @@ def load_country_list():
     country_list (pandas dataframe): Dataframe containing the country list
     """
     # country_list = pd.read_csv('https://github.com/testalorenzo/climate_repository/blob/main/poly/country_list.csv?raw=true')
-    country_list = pd.read_csv('./poly/country_list.csv?raw=true')
+    country_list = pd.read_csv('./poly/country_list.csv')
     return country_list
 
 # Page title
