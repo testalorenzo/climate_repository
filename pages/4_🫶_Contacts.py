@@ -5,7 +5,7 @@ st.markdown("# The Weighted Climate Data Repository")
 st.markdown("## Contacts")
 
 """
-Feel free to send questions, bug reports, documentation issues, and other comments to Marco Gortan (marco.gortan@studbocconi.it) and [Lorenzo Testa](https://testalorenzo.github.io) (l.testa@sssup.it)
+Feel free to send questions, bug reports, documentation issues, and other comments to Marco Gortan (marco.gortan@unisg.ch) and [Lorenzo Testa](https://testalorenzo.github.io) (l.testa@sssup.it)
 """
 
 # Side bar images

@@ -5,17 +5,26 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import duckdb as db
 
-@st.cache_data()
-def load_data(geo_resolution, variable, source, weight, weight_year):
+@st.cache_data(ttl=3600, show_spinner="Fetching data from API...")
+def load_data(geo_resolution, variable, source, weight, weight_year, col_range):
     if weight != "_un":
-        data = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.csv', encoding='latin-1')
+        file = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.parquet'
     else:
-        data = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/data/'+ geo_resolution + '_' + source + '_' + variable + weight +'.csv', encoding='latin-1')
-    return data
+        file = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '.parquet'
+
+    if geo_resolution == 'gadm0':
+        country_name = 'iso3'
+    else:
+        country_name = 'GID_0'
+
+    query = f"SELECT {col_range} FROM '{file}'"
+    imported_data = db.query(query).df()
+    return imported_data
 
 def load_gadm1():
-    dta = pd.read_csv('https://raw.githubusercontent.com/testalorenzo/climate_repository/main/poly/gadm1_adm.csv', encoding='latin-1')
+    dta = pd.read_csv('./poly/gadm1_adm.csv', encoding='latin-1')
     return dta
 
 # Page title
@@ -136,9 +145,6 @@ else:
 
 # 4. Access data
 
-# Read data from GitHub
-data = load_data(geo_resolution, variable, source, weight, weight_year)
-
 # Introduce gaps to fix columns
 if geo_resolution == 'gadm1':
     gap = 2
@@ -146,7 +152,14 @@ else:
     gap = 1
 
 # Extract selected years
-data = data.iloc[:, list(range(gap)) + list(range((starting_year-min_year)*12 + gap, (ending_year-min_year)*12 + gap + 12))]
+months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+if geo_resolution == 'gadm0':
+    col_range = str(['iso3'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+else:
+    col_range = str(['GID_0', 'NAME_1'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+
+# Read data from GitHub
+data = load_data(geo_resolution, variable, source, weight, weight_year, col_range)
 
 # Summarize if time frequency is yearly
 if time_frequency == 'yearly' and threshold_dummy == 'False':
