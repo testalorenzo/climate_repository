@@ -29,6 +29,17 @@ def load_gadm1():
 
 # Page title
 st.set_page_config(page_title="Weighted Climate Data Repository", page_icon="🌎", initial_sidebar_state="expanded")
+
+hide_menu_style = """
+        <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
+        </style>
+        """
+
+st.markdown(hide_menu_style, unsafe_allow_html=True)
+
 st.markdown("# The Weighted Climate Data Repository")
 st.markdown("## Download Data")
 
