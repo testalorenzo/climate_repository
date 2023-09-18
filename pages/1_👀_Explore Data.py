@@ -9,7 +9,7 @@ import altair as alt
 import plotly.express as px
 import json
 import duckdb as db
-from pyogrio import read_dataframe
+import pickle
 
 # --------- #
 # Functions #
@@ -44,19 +44,19 @@ def load_shapes(geo_resolution):
     """
     if geo_resolution == 'gadm0':
         # world = gpd.read_file('./poly/simplified_gadm0.gpkg')
-        world = read_dataframe('./poly/simplified_gadm0.gpkg')
-        # picklefile = open('./poly/gadm0.pickle', 'rb')
-        # world = pickle.load(picklefile)
-        # picklefile.close()
+        # world = read_dataframe('./poly/simplified_gadm0.gpkg')
+        picklefile = open('./poly/gadm0.pickle', 'rb')
+        world = pickle.load(picklefile)
+        picklefile.close()
         world.index = world.GID_0
         world_json = world.to_json()
         world_json = json.loads(world_json)
     else:
         # world = gpd.read_file('./poly/simplified_gadm1.gpkg')
-        world = read_dataframe('./poly/simplified_gadm1.gpkg')
-        # picklefile = open('./poly/gadm1.pickle', 'rb')
-        # world = pickle.load(picklefile)
-        # picklefile.close()
+        # world = read_dataframe('./poly/simplified_gadm1.gpkg')
+        picklefile = open('./poly/gadm1.pickle', 'rb')
+        world = pickle.load(picklefile)
+        picklefile.close()
         world.index = world.NAME_1
         world_json = world.to_json()
         world_json = json.loads(world_json)
