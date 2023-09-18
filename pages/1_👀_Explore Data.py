@@ -6,16 +6,16 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import altair as alt
-import geopandas as gpd
 import plotly.express as px
 import json
 import duckdb as db
+from pyogrio import read_dataframe
 
 # --------- #
 # Functions #
 # --------- #
 
-@st.cache_data(ttl=3600, show_spinner="Fetching data from API...")
+@st.cache_data(ttl=3600, show_spinner="Fetching data...")
 def load_data(geo_resolution, variable, source, weight, weight_year, col_range, row_range):
     if weight != "_un":
         file = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.parquet'
@@ -31,7 +31,7 @@ def load_data(geo_resolution, variable, source, weight, weight_year, col_range, 
     imported_data = db.query(query).df()
     return imported_data
 
-@st.cache_data(ttl=3600, show_spinner="Fetching shapes from API...")
+@st.cache_data(ttl=3600, show_spinner="Fetching shapes...")
 def load_shapes(geo_resolution):
     """
     Load shapefiles from the repository and return a geopandas dataframe
@@ -43,18 +43,26 @@ def load_shapes(geo_resolution):
     world (geopandas dataframe): Geopandas dataframe containing the gadm0 shapes
     """
     if geo_resolution == 'gadm0':
-        world = gpd.read_file('./poly/simplified_gadm0.gpkg')
+        # world = gpd.read_file('./poly/simplified_gadm0.gpkg')
+        world = read_dataframe('./poly/simplified_gadm0.gpkg')
+        # picklefile = open('./poly/gadm0.pickle', 'rb')
+        # world = pickle.load(picklefile)
+        # picklefile.close()
         world.index = world.GID_0
         world_json = world.to_json()
         world_json = json.loads(world_json)
     else:
-        world = gpd.read_file('./poly/simplified_gadm1.gpkg')
+        # world = gpd.read_file('./poly/simplified_gadm1.gpkg')
+        world = read_dataframe('./poly/simplified_gadm1.gpkg')
+        # picklefile = open('./poly/gadm1.pickle', 'rb')
+        # world = pickle.load(picklefile)
+        # picklefile.close()
         world.index = world.NAME_1
         world_json = world.to_json()
         world_json = json.loads(world_json)
     return world.reset_index(drop=True), world_json
 
-@st.cache_data(ttl=3600, show_spinner="Fetching country names from API...")
+@st.cache_data(ttl=3600, show_spinner="Fetching country names...")
 def load_country_list():
     """
     Load country list from the repository and return a pandas dataframe
@@ -278,8 +286,6 @@ with tab1:
         data_plot = pd.melt(data_plot, id_vars='index', var_name='time', value_name=variable)
 
     # Plot settings
-    # alt.themes.enable("streamlit")
-
     highlight = alt.selection(type='single', on='mouseover', fields=['index'], nearest=True)
 
     base = alt.Chart(data_plot).encode(
