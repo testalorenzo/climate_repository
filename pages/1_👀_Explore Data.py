@@ -7,7 +7,6 @@ import pandas as pd
 import numpy as np
 import altair as alt
 import plotly.express as px
-import json
 import duckdb as db
 import pickle
 
@@ -16,12 +15,15 @@ import pickle
 # --------- #
 
 @st.cache_data(ttl=3600, show_spinner="Fetching data...")
-def load_data(geo_resolution, variable, source, weight, weight_year, col_range, row_range):
+def load_data(geo_resolution, variable, source, weight, weight_year, col_range, row_range, time_frequency):
     if weight != "_un":
         file = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.parquet'
     
     else:
         file = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '.parquet'
+
+    if time_frequency == 'daily':
+        file = './data/' + geo_resolution + '_' + source + '_' + variable + '_' + weight_year + '_daily.parquet'
 
     if geo_resolution == 'gadm0':
         country_name = 'iso3'
@@ -158,6 +160,8 @@ elif threshold_dummy == 'True':
     time_frequency = 'yearly'
     st.caption('Time frequency')
     st.markdown(time_frequency)
+# elif variable == 'temperature' and source == 'ERA5' and weight == 'population density' and weight_year == '2015':
+#     time_frequency = st.selectbox('Time frequency', ("yearly", "monthly", "daily"), index = 0, help = 'Time frequency of the data')
 else:
     time_frequency = st.selectbox('Time frequency', ("yearly", "monthly"), index = 0, help = 'Time frequency of the data')
 
@@ -220,6 +224,8 @@ if geo_resolution == 'gadm0':
         col_range = str(['iso3'] + ["w" + y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
     else:
         col_range = str(['iso3'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+    # if time_frequency == 'daily':
+    #     col_range = str(['iso3'] + ['X' + str(x).replace('-', '.') for x in pd.date_range(start=str(starting_year) + "-01-01",end= str(ending_year) + "-12-31").format("YYYY.MM.DD")])
 else:
     if variable == 'spei':
         col_range = str(['GID_0', 'NAME_1'] + ["w" + y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
@@ -243,7 +249,9 @@ else:
 # --------- #
 
 # Read data from GitHub
-data = load_data(geo_resolution, variable, source, weight, weight_year, col_range, row_range)
+data = load_data(geo_resolution, variable, source, weight, weight_year, col_range, row_range, time_frequency)
+
+st.dataframe(data)
 
 # Summarize if time frequency is yearly
 if time_frequency == 'yearly' and threshold_dummy == 'False':
@@ -281,6 +289,9 @@ with tab1:
     if time_frequency == 'monthly':
         label_vector = [str(x) + "_" + str(y) for x in range(starting_year, ending_year + 1) for y in range(1,13)]
         label_vector = pd.to_datetime(label_vector, format="%Y_%m")
+    # elif time_frequency == 'daily':
+    #     label_vector = [str(x) + "_" + str(y) for x in range(starting_year, ending_year + 1) for y in range(1,366)]
+    #     label_vector = pd.to_datetime(label_vector, format="%Y_%j")
     else:
         label_vector = data_plot.columns
         label_vector = pd.to_datetime(label_vector, format="%Y")

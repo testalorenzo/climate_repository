@@ -14,11 +14,6 @@ def load_data(geo_resolution, variable, source, weight, weight_year, col_range):
     else:
         file = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '.parquet'
 
-    if geo_resolution == 'gadm0':
-        country_name = 'iso3'
-    else:
-        country_name = 'GID_0'
-
     query = f"SELECT {col_range} FROM '{file}'"
     imported_data = db.query(query).df()
     return imported_data
