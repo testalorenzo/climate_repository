@@ -50,8 +50,8 @@ def load_shapes(geo_resolution):
         world = pickle.load(picklefile)
         picklefile.close()
         world.index = world.GID_0
-        world_json = world.to_json()
-        world_json = json.loads(world_json)
+        # world_json = world.to_json()
+        # world_json = json.loads(world_json)
     else:
         # world = gpd.read_file('./poly/simplified_gadm1.gpkg')
         # world = read_dataframe('./poly/simplified_gadm1.gpkg')
@@ -59,9 +59,9 @@ def load_shapes(geo_resolution):
         world = pickle.load(picklefile)
         picklefile.close()
         world.index = world.NAME_1
-        world_json = world.to_json()
-        world_json = json.loads(world_json)
-    return world.reset_index(drop=True), world_json
+        # world_json = world.to_json()
+        # world_json = json.loads(world_json)
+    return world.reset_index(drop=True)#, world_json
 
 @st.cache_data(ttl=3600, show_spinner="Fetching country names...")
 def load_country_list():
@@ -233,7 +233,6 @@ observation_list.sort()
 options = st.multiselect('Countries', ['ALL'] + observation_list, default='United States', help = 'Choose the geographical units to show in the plot')
 
 # Build row range
-world, world_json = load_shapes(geo_resolution)
 if 'ALL' in options:
     row_range = tuple(world0.GID_0.tolist())
 else:
@@ -318,6 +317,8 @@ with tab1:
 # ------------------- #
 # Plot choropleth map #
 # ------------------- #
+
+world = load_shapes(geo_resolution)
 
 with tab2: 
     if time_frequency == 'monthly':
