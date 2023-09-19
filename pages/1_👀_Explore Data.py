@@ -19,6 +19,7 @@ import pickle
 def load_data(geo_resolution, variable, source, weight, weight_year, col_range, row_range):
     if weight != "_un":
         file = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.parquet'
+    
     else:
         file = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '.parquet'
 
@@ -215,9 +216,15 @@ else:
 # Extract selected years
 months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 if geo_resolution == 'gadm0':
-    col_range = str(['iso3'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+    if variable == 'spei':
+        col_range = str(['iso3'] + ["w" + y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+    else:
+        col_range = str(['iso3'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
 else:
-    col_range = str(['GID_0', 'NAME_1'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+    if variable == 'spei':
+        col_range = str(['GID_0', 'NAME_1'] + ["w" + y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+    else:
+        col_range = str(['GID_0', 'NAME_1'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
 
 # Observation filters
 world0 = load_country_list()
