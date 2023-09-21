@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 import duckdb as db
 
-@st.cache_data(ttl=3600, show_spinner="Fetching data from API...")
+@st.cache_data(ttl=3600, show_spinner="Fetching data...")
 def load_data(geo_resolution, variable, source, weight, weight_year, col_range):
     if weight != "_un":
         file = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.parquet'

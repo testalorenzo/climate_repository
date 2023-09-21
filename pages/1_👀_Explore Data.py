@@ -251,7 +251,7 @@ else:
 # Read data from GitHub
 data = load_data(geo_resolution, variable, source, weight, weight_year, col_range, row_range, time_frequency)
 
-st.dataframe(data)
+# st.dataframe(data)
 
 # Summarize if time frequency is yearly
 if time_frequency == 'yearly' and threshold_dummy == 'False':
