@@ -1,4 +1,5 @@
 geopandas
+altair
 duckdb
 plotly
 pyogrio
