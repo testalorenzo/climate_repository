@@ -9,6 +9,7 @@ import altair as alt
 import plotly.express as px
 import duckdb as db
 import pickle
+import geopandas
 
 # --------- #
 # Functions #
