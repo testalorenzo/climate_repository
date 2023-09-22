@@ -160,8 +160,8 @@ elif threshold_dummy == 'True':
     time_frequency = 'yearly'
     st.caption('Time frequency')
     st.markdown(time_frequency)
-# elif variable == 'temperature' and source == 'ERA5' and weight == 'population density' and weight_year == '2015':
-#     time_frequency = st.selectbox('Time frequency', ("yearly", "monthly", "daily"), index = 0, help = 'Time frequency of the data')
+elif variable == 'temperature' and source == 'ERA5' and weight == 'population density' and weight_year == '2015':
+    time_frequency = st.selectbox('Time frequency', ("yearly", "monthly", "daily"), index = 0, help = 'Time frequency of the data')
 else:
     time_frequency = st.selectbox('Time frequency', ("yearly", "monthly"), index = 0, help = 'Time frequency of the data')
 
@@ -224,8 +224,8 @@ if geo_resolution == 'gadm0':
         col_range = str(['iso3'] + ["w" + y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
     else:
         col_range = str(['iso3'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
-    # if time_frequency == 'daily':
-    #     col_range = str(['iso3'] + ['X' + str(x).replace('-', '.') for x in pd.date_range(start=str(starting_year) + "-01-01",end= str(ending_year) + "-12-31").format("YYYY.MM.DD")])
+    if time_frequency == 'daily':
+        col_range = str(['iso3'] + ['X' + str(x).replace('-', '.') for x in pd.date_range(start=str(starting_year) + "-01-01",end= str(ending_year) + "-12-31").format("YYYY.MM.DD") if x != ''])[1:-1].replace("'", "")
 else:
     if variable == 'spei':
         col_range = str(['GID_0', 'NAME_1'] + ["w" + y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
@@ -250,8 +250,6 @@ else:
 
 # Read data from GitHub
 data = load_data(geo_resolution, variable, source, weight, weight_year, col_range, row_range, time_frequency)
-
-# st.dataframe(data)
 
 # Summarize if time frequency is yearly
 if time_frequency == 'yearly' and threshold_dummy == 'False':
