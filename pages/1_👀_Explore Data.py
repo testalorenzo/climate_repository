@@ -130,7 +130,7 @@ if weight!="unweighted":
     with col5:
         weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting variable')
 else:
-    weight_year = "2015"
+    weight_year = '2015'
 
 # Threshold settings
 if variable != 'SPEI':
