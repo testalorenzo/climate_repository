@@ -6,13 +6,17 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import duckdb as db
+import re
 
 @st.cache_data(ttl=3600, show_spinner="Fetching data...")
-def load_data(geo_resolution, variable, source, weight, weight_year, col_range):
+def load_data(geo_resolution, variable, source, weight, weight_year, col_range, time_frequency):
     if weight != "_un":
         file = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '_' + weight_year + '.parquet'
     else:
         file = './data/' + geo_resolution + '_' + source + '_' + variable + weight + '.parquet'
+    
+    if time_frequency == 'daily':
+        file = './data/' + geo_resolution + '_' + source + '_' + variable + '_' + weight_year + '_daily.parquet'
 
     query = f"SELECT {col_range} FROM '{file}'"
     imported_data = db.query(query).df()
@@ -67,7 +71,7 @@ if weight!="unweighted":
     with col5:
         weight_year = st.selectbox('Weighting year', ('2000', '2005', '2010', '2015'), index=0, help='Base year for the weighting variable')
 else:
-    weight_year = "NA"
+    weight_year = '2015'
 
 # 2. Select the time period, the threshold and observations.
 
@@ -89,26 +93,6 @@ if variable != 'SPEI':
 else:
     st.warning('Warning: ' + variable + ' data do not allow for threshold customization' , icon="⚠️")
 
-
-# Time period, threshold and observations
-if source == 'CRU TS':
-    min_year = 1901
-    max_year = 2022
-    source = 'cru'
-elif source == 'ERA5':
-    min_year = 1940
-    max_year = 2022
-    source = 'era'
-elif source == 'CSIC':
-    min_year = 1901
-    max_year = 2020
-    source = 'spei'
-else: # (UDelaware)
-    min_year = 1900
-    max_year = 2017
-    source = 'dela'
-
-
 # 3. Preferences structure
 
 # Time preferences
@@ -123,14 +107,42 @@ with col1:
         time_frequency = 'yearly'
         st.caption('Time frequency')
         st.markdown(time_frequency)
+    elif variable == 'temperature' and source == 'ERA5' and geo_resolution == 'gadm0' and weight_year == '2015':
+        time_frequency = st.selectbox('Time frequency', ("yearly", "monthly", "daily"), index = 0, help = 'Time frequency of the data')
     else:
         time_frequency = st.selectbox('Time frequency', ("yearly", "monthly"), index = 0, help = 'Time frequency of the data', key = 'time_frequency_ts')
+
+# Time period, threshold and observations
+if source == 'CRU TS':
+    min_year = 1901
+    max_year = 2022
+    source = 'cru'
+elif source == 'ERA5':
+    if time_frequency == 'daily':
+        min_year = 1950
+        max_year = 2023
+    else:
+        min_year = 1940
+        max_year = 2022
+    source = 'era'
+elif source == 'CSIC':
+    min_year = 1901
+    max_year = 2020
+    source = 'spei'
+else: # (UDelaware)
+    min_year = 1900
+    max_year = 2017
+    source = 'dela'
+
 # Starting year
 with col2:
     starting_year = st.slider('Starting year', min_year, max_year, min_year)
 # Ending year
 with col3:
-    ending_year = st.slider('Ending year', starting_year, max_year, max_year)
+    if time_frequency == 'daily':
+        ending_year = st.slider('Ending year', starting_year, max_year, starting_year)
+    else:
+        ending_year = st.slider('Ending year', starting_year, max_year, max_year)
 
 # Rename variables as to match datasets names
 if variable == 'temperature':
@@ -160,12 +172,26 @@ else:
 # Extract selected years
 months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
 if geo_resolution == 'gadm0':
-    col_range = str(['iso3'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+    if variable == 'spei':
+        col_range = str(['iso3'] + ["w" + y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+    else:
+        col_range = str(['iso3'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+    if time_frequency == 'daily':
+        col_range = str(['iso3'] + ['[X' + str(x).replace('-', '') + ']' for x in pd.date_range(start=str(starting_year) + "-01-01",end= str(ending_year) + "-12-31").format("YYYY.MM.DD") if x != ''])[1:-1].replace("'", "")
 else:
-    col_range = str(['GID_0', 'NAME_1'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+    if variable == 'spei':
+        col_range = str(['GID_0', 'NAME_1'] + ["w" + y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+    else:
+        col_range = str(['GID_0', 'NAME_1'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
 
 # Read data from GitHub
-data = load_data(geo_resolution, variable, source, weight, weight_year, col_range)
+data = load_data(geo_resolution, variable, source, weight, weight_year, col_range, time_frequency)
+
+# Fix daily value type
+if time_frequency == 'daily':
+    data = data.applymap(lambda x: x[0] if isinstance(x, list) else x)
+    #data.columns = data.columns.str.replace('main.list_value', '')
+    data.columns = pd.Series(data.columns).apply(lambda x: re.sub('[^0-9]','', x))
 
 # Summarize if time frequency is yearly
 if time_frequency == 'yearly' and threshold_dummy == 'False':
@@ -229,7 +255,8 @@ with col3:
 
 # 6. Visualize data
 st.markdown('### Preview of the data')
-st.dataframe(data_show)
+st.markdown('We are showing the first 100 rows of the data. If you want to see the full dataset, please download it.')
+st.dataframe(data_show.head(100))
 
 # Side bar images
 # st.sidebar.image("Embeds logo.png", use_column_width=True)

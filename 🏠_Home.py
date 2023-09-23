@@ -17,7 +17,7 @@ st.markdown("# Welcome to the Weighted Climate Data Repository Dashboard!")
 
 """
 ---
-> 🤢 09/21/2023: We have been experiencing some issues with Community Cloud, the great service that hosts our dashboard, due to an outage. Services should be now restored!
+> 📢 09/23/2023: We are thrilled to announce that our dashboard now offers DAILY data for specific gadm0 specifications! Check it out!
 >
 > 🤓 09/18/2023: Introducing *parquet* behind the scenes! Navigate through the dashboard and download data in a faster and more efficient way!
 ---

@@ -160,7 +160,7 @@ elif threshold_dummy == 'True':
     time_frequency = 'yearly'
     st.caption('Time frequency')
     st.markdown(time_frequency)
-elif variable == 'temperature' and source == 'ERA5' and weight == 'population density' and weight_year == '2015':
+elif variable == 'temperature' and source == 'ERA5' and weight_year == '2015' and geo_resolution == 'gadm0':
     time_frequency = st.selectbox('Time frequency', ("yearly", "monthly", "daily"), index = 0, help = 'Time frequency of the data')
 else:
     time_frequency = st.selectbox('Time frequency', ("yearly", "monthly"), index = 0, help = 'Time frequency of the data')
@@ -171,8 +171,12 @@ if source == 'CRU TS':
     max_year = 2022
     source = 'cru'
 elif source == 'ERA5':
-    min_year = 1940
-    max_year = 2022
+    if time_frequency == 'daily':
+        min_year = 1950
+        max_year = 2023
+    else:
+        min_year = 1940
+        max_year = 2022
     source = 'era'
 elif source == 'CSIC':
     min_year = 1901
@@ -189,7 +193,10 @@ with col1:
     starting_year = st.slider('Starting year', min_year, max_year, min_year)
 # Ending year
 with col2:
-    ending_year = st.slider('Ending year', starting_year, max_year, max_year)
+    if time_frequency == 'daily':
+        ending_year = st.slider('Ending year', starting_year, max_year, starting_year)
+    else:
+        ending_year = st.slider('Ending year', starting_year, max_year, max_year)
 
 # -------------------- #
 # Filters before query #
@@ -225,12 +232,14 @@ if geo_resolution == 'gadm0':
     else:
         col_range = str(['iso3'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
     if time_frequency == 'daily':
-        col_range = str(['iso3'] + ['X' + str(x).replace('-', '.') for x in pd.date_range(start=str(starting_year) + "-01-01",end= str(ending_year) + "-12-31").format("YYYY.MM.DD") if x != ''])[1:-1].replace("'", "")
+        col_range = str(['iso3'] + ['[X' + str(x).replace('-', '') + ']' for x in pd.date_range(start=str(starting_year) + "-01-01",end= str(ending_year) + "-12-31").format("YYYY.MM.DD") if x != ''])[1:-1].replace("'", "")
 else:
     if variable == 'spei':
         col_range = str(['GID_0', 'NAME_1'] + ["w" + y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
     else:
         col_range = str(['GID_0', 'NAME_1'] + [y + str(x) for x in range(starting_year, ending_year + 1) for y in months])[1:-1].replace("'", "")
+    # if time_frequency == 'daily':
+    #     col_range = str(['GID_0', 'NAME_1'] + ['[X' + str(x).replace('-', '') + ']' for x in pd.date_range(start=str(starting_year) + "-01-01",end= str(ending_year) + "-12-31").format("YYYY.MM.DD") if x != ''])[1:-1].replace("'", "")
 
 # Observation filters
 world0 = load_country_list()
@@ -250,6 +259,10 @@ else:
 
 # Read data from GitHub
 data = load_data(geo_resolution, variable, source, weight, weight_year, col_range, row_range, time_frequency)
+
+# Fix daily value type
+if time_frequency == 'daily':
+    data = data.applymap(lambda x: x[0] if isinstance(x, list) else x)
 
 # Summarize if time frequency is yearly
 if time_frequency == 'yearly' and threshold_dummy == 'False':
@@ -287,9 +300,9 @@ with tab1:
     if time_frequency == 'monthly':
         label_vector = [str(x) + "_" + str(y) for x in range(starting_year, ending_year + 1) for y in range(1,13)]
         label_vector = pd.to_datetime(label_vector, format="%Y_%m")
-    # elif time_frequency == 'daily':
-    #     label_vector = [str(x) + "_" + str(y) for x in range(starting_year, ending_year + 1) for y in range(1,366)]
-    #     label_vector = pd.to_datetime(label_vector, format="%Y_%j")
+    elif time_frequency == 'daily':
+        label_vector = [str(x) for x in pd.date_range(start=str(starting_year) + "-01-01",end= str(ending_year) + "-12-31").format("YYYY.MM.DD") if x != '']
+        label_vector = pd.to_datetime(label_vector, format="%Y-%m-%d")
     else:
         label_vector = data_plot.columns
         label_vector = pd.to_datetime(label_vector, format="%Y")
@@ -327,12 +340,14 @@ with tab1:
 # Plot choropleth map #
 # ------------------- #
 
-world = load_shapes(geo_resolution)
-
 with tab2: 
-    if time_frequency == 'monthly':
+    if time_frequency == 'daily':
+        st.warning('Choropleth map not available for daily data')
+    elif time_frequency == 'monthly':
         st.warning('Choropleth map not available for monthly data')
     else:
+        world = load_shapes(geo_resolution)
+
         snapshot = st.slider('Snapshot year', starting_year, ending_year, starting_year, 1, help = 'Choose the year to show in the plot')    
         snapshot_data = world[world.GID_0.isin(row_range)]
         snapshot_data['snapshot'] = data[int(snapshot)].values
