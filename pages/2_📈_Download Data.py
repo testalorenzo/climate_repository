@@ -191,7 +191,7 @@ data = load_data(geo_resolution, variable, source, weight, weight_year, col_rang
 if time_frequency == 'daily':
     data = data.applymap(lambda x: x[0] if isinstance(x, list) else x)
     #data.columns = data.columns.str.replace('main.list_value', '')
-    data.columns = pd.Series(data.columns).apply(lambda x: re.sub('[^0-9]','', x))
+    data.columns = pd.Series(data.columns).apply(lambda x: re.sub('[^0-9]','', x) if x != 'iso3' else x)
 
 # Summarize if time frequency is yearly
 if time_frequency == 'yearly' and threshold_dummy == 'False':
