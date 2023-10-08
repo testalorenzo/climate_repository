@@ -160,7 +160,7 @@ elif threshold_dummy == 'True':
     time_frequency = 'yearly'
     st.caption('Time frequency')
     st.markdown(time_frequency)
-elif variable == 'temperature' and source == 'ERA5' and weight_year == '2015' and geo_resolution == 'gadm0':
+elif source == 'ERA5' and weight_year == '2015' and geo_resolution == 'gadm0':
     time_frequency = st.selectbox('Time frequency', ("yearly", "monthly", "daily"), index = 0, help = 'Time frequency of the data')
 else:
     time_frequency = st.selectbox('Time frequency', ("yearly", "monthly"), index = 0, help = 'Time frequency of the data')
