@@ -116,7 +116,7 @@ hide_menu_style = """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
 
 st.markdown("# The Weighted Climate Data Repository")
-st.markdown("## Explore Data")
+st.markdown("## Download Data")
 
 # ---------- #
 # Parameters #
