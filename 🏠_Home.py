@@ -17,6 +17,8 @@ st.markdown("# Welcome to the Weighted Climate Data Repository Dashboard!")
 
 """
 ---
+> 🎃 10/22/2023: Halloween update! We have introduced several backend improvements to make the dashboard faster! Also, we are now computing thresholds based on daily data!
+>
 > 📢 09/23/2023: We are thrilled to announce that our dashboard now offers DAILY data for specific gadm0 specifications! Check it out!
 >
 > 🤓 09/18/2023: Introducing *parquet* behind the scenes! Navigate through the dashboard and download data in a faster and more efficient way!
@@ -51,9 +53,6 @@ Users willing to run our pipelines on their own data are very welcome to reach u
 Stay tuned for updates!
 """
 
-# Side bar images
-# st.sidebar.image("Embeds logo.png", use_column_width=True)
-# st.sidebar.image("download.jpeg", use_column_width=True)
 with st.sidebar:
     """
     [Institute of Economics](https://www.santannapisa.it/en/istituto/economia) and [L'EMbeDS Department](https://www.santannapisa.it/en/department-excellence/embeds)

@@ -58,14 +58,16 @@ def load_data(geo_resolution, variable, source, weight, weight_year, row_range, 
         freq = 'daily'
         time_idx = pd.date_range(start=str(st.session_state.starting_year) + "-01-01",
                                  periods=len(row_range), freq='D')
-
-    # TODO: Import regions dictionary mapping GADM0 to GADM1
-    if geo_resolution == 'gadm0':
-        cols = str(col_range)[1:-1].replace("'", "")
+        
+    if col_range == '*':
+        cols = '*'
     else:
-        regions = pd.read_csv('./poly/gadm1_adm.csv')
-        cols = regions.loc[regions.GID_0.isin(col_range), 'GID_1'].tolist()
-        cols = str(cols)[1:-1].replace("'", "").replace(".", "_")
+        if geo_resolution == 'gadm0':
+            cols = str(col_range)[1:-1].replace("'", "")
+        else:
+            regions = pd.read_csv('./poly/gadm1_adm.csv')
+            cols = regions.loc[regions.GID_0.isin(col_range), 'GID_1'].tolist()
+            cols = str(cols)[1:-1].replace("'", "").replace(".", "_")
     
     file = './data/' + geo_resolution + '_' + source + '_' + variable + '_' + weight + '_' + weight_year + '_' + freq + '.parquet'
     
@@ -273,7 +275,7 @@ options = st.multiselect('Countries', ['ALL'] + observation_list, default='Unite
 
 # Build row range
 if 'ALL' in options:
-    country_range = tuple(world0.GID_0.tolist())
+    country_range = '*'
 else:
     country_range = tuple(world0.loc[world0.COUNTRY.isin(options), 'GID_0'].tolist())
 
@@ -314,12 +316,14 @@ tab1, tab2 = st.tabs(['Time series', 'Choropleth map'])
 
 with tab1: 
     data_plot = data
+    if st.session_state.geo_resolution == 'gadm1':
+        regions = pd.read_csv('./poly/gadm1_adm.csv')
+        regions.GID_1 = regions.GID_1.apply(lambda x: str(x).replace(".", "_"))
+        regions = regions.loc[regions.GID_1.isin(data.columns), 'NAME_1'].tolist()
+        data_plot.columns = regions
     data_plot = data_plot.reset_index()
 
-    if st.session_state.geo_resolution == 'gadm0':
-        data_plot = pd.melt(data_plot, id_vars='index', var_name='country', value_name=variable)
-    else:
-        data_plot = pd.melt(data_plot, id_vars='index', var_name='country', value_name=variable)
+    data_plot = pd.melt(data_plot, id_vars='index', var_name='country', value_name=variable)
 
     # Plot settings
     highlight = alt.selection_point(on='mouseover', fields=['index'], nearest=True)
