@@ -1,0 +1,6 @@
+gadm1_era_tmp_un__daily.parquet filter=lfs diff=lfs merge=lfs -text
+gadm1_era_pre_un__daily.parquet filter=lfs diff=lfs merge=lfs -text
+gadm1_era_tmp_pop_2015_daily.parquet filter=lfs diff=lfs merge=lfs -text
+gadm1_era_pre_pop_2015_daily.parquet filter=lfs diff=lfs merge=lfs -text
+gadm1_era_tmp_lights_2015_daily.parquet filter=lfs diff=lfs merge=lfs -text
+gadm1_era_era_lights_2015_daily.parquet filter=lfs diff=lfs merge=lfs -text
